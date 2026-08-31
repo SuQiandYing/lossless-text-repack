@@ -46,10 +46,8 @@ python scripts/check_no_literals.py src/ --exclude opcodelist        # 引擎魔
 ## 文件
 
 ```
-SKILL.md              规范正文
-references/gui.md     界面怎么做
-references/performance.md   批量跑快
-scripts/              7 个检查脚本
+SKILL.md     规范正文，§0-§12 全在一个文件里
+scripts/     7 个检查脚本
 ```
 
 完整规范见 [SKILL.md](SKILL.md)。
