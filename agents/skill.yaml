@@ -1,0 +1,4 @@
+interface:
+  display_name: "无损文本回封"
+  short_description: "脚本字节码与归档的无损逆向重建：提取文本、翻译、逐字节验证回封"
+  default_prompt: "用 $lossless-text-repack 处理 SAMPLE：按证据申报理解深度，保持字节覆盖率 1.0 与零编辑逐字节往返，只经已证明的引用连接提取文本，按站点支持变长回封，交付两按钮界面并通过全部七个门禁。"
