@@ -1,0 +1,1148 @@
+{
+  "schema_version": 1,
+  "source_sha256": "4105e2c4c7512baea49cebd21a5cf12adb5c249a22e69b2d6efbe9fb0d2a1bfe",
+  "source_fixture": "tests/fixtures/specification-original.md",
+  "source_line_count": 2012,
+  "sections": [
+    {
+      "name": "principles",
+      "title": "目标与六条铁律",
+      "path": "references/details/principles.md",
+      "start_line": 6,
+      "end_line": 41,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 31,
+          "end_line": 32,
+          "before": "   两个**平级投影**，均可被人编辑（§2.5）。提取文本只读内存 IR，不读 `asm.txt`。跨文件的文本与\n   引用发现只走已证明的引用连接（§3）；**严禁**对原始字节做正则、特征码或旁路文本扫描。\n",
+          "after": "   两个**平级投影**，均可被人编辑（§2.5）。提取文本只读内存 IR，不读 `asm.txt`。\n   文本从已证明的结构或引用连接发现；原始扫描只能产生待验证假设，不直接授权提取或改写。\n",
+          "reason": "区分探索候选与授权证据，保留结构化提取约束。"
+        },
+        {
+          "start_line": 38,
+          "end_line": 38,
+          "before": "   产出为空或只剩单一类别时，必须当作失败而不是\"该样本就这样\"。\n",
+          "after": "   已证明的必需类别为空时失败；仅分布偏斜先显式复核，不静默忽略，也不将经验阈值当作事实。\n",
+          "reason": "避免误拒纯旁白/UI 等合法分布。"
+        }
+      ],
+      "result_sha256": "8f329d97e1b1b03da9a54ca7714cc8de59649209e1b23cdb027ce828f6694b61",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "893cfbef50ed8ae6cc877958b58b546523d4fb767f4a564fb69b3e4c9d3ce274",
+          "result_sha256": "893cfbef50ed8ae6cc877958b58b546523d4fb767f4a564fb69b3e4c9d3ce274",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "e198c72f0f4c67511ff20404c91f2f71dc5cda7fb181978722e4f840fcc915e6",
+          "result_sha256": "e198c72f0f4c67511ff20404c91f2f71dc5cda7fb181978722e4f840fcc915e6",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "output-sanity-delivery",
+      "title": "产出检查与完整交付",
+      "path": "references/details/output-sanity-delivery.md",
+      "start_line": 42,
+      "end_line": 177,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 63,
+          "end_line": 64,
+          "before": "除字节门禁外，必须增设针对**产出内容**的检查。以下任一条命中即判定为失败并转人工确认，\n不得以「样本特性」为由放行：\n",
+          "after": "除字节门禁外，必须检查**产出内容**。下列有领域/样本证据支持的缺失判失败；\n偏斜、密度变化是 advisory 并要求复核。合法空产出要记理由与证据，不能静默放行：\n",
+          "reason": "保留所有检查项目，区分硬约束与经验异常。"
+        },
+        {
+          "start_line": 80,
+          "end_line": 80,
+          "before": "`ParseHypothesisLattice`（见术语表）原用于格式未知时保留竞争假设。上述案例表明它还有第二项用途：\n",
+          "after": "`ParseHypothesisLattice`（保存竞争结构、支持/反对证据及未决分支的假设集合）还用于识别\n",
+          "reason": "补上不存在的术语表指向。"
+        },
+        {
+          "start_line": 99,
+          "end_line": 100,
+          "before": "- 新增形态支持后，须回归验证既有样本的产出条数**完全不变**（实测为 66,334 条前后一致），\n  以证明新分支未覆盖既有路径。\n",
+          "after": "- 新增形态后，未要求改变的既有样本条数、内容、角色和绑定应不变（历史例为 66,334 条）。\n  修复旧漏提需记录预期差异并更新基线，条数不变本身不是充分证明。\n",
+          "reason": "计数不能单独证明提取结果正确。"
+        },
+        {
+          "start_line": 168,
+          "end_line": 172,
+          "before": "**输出位置统一为一条规则**：在**输入的共同父目录**下建立 `output/`，内部按 §2.3 布局\n（`ir/ asm/ texts/ rebuilt/ reports/`）。输入为单个文件时，其父目录即共同父目录。禁止在源文件所在\n位置产生散落文件，禁止覆盖原件（铁律 1）。三种入口均遵守此规则，GUI 与命令行仅可修改 `output/`\n的位置。\n\n",
+          "after": "**三种入口统一使用 §11.4 的同级默认路径**：文本 `<输入名>_text/`、回封\n`<输入名>_rebuilt/`；内部按 §2.3 分配 texts/、asm/、_work/。多输入使用显式作业根和\n源命名空间消除重名。可指定输出位置，但不得覆盖原件或把上轮产物当输入。\n完整工具仍须提供拖放、CLI 和 GUI 三种入口，不以路径统一为由删除入口。\n",
+          "reason": "消除 output/ 与 GUI _text/_rebuilt 的默认冲突，保留原 GUI 设计。"
+        },
+        {
+          "start_line": 173,
+          "end_line": 174,
+          "before": "- Python 3.11+，使用 `struct`/`pathlib`/`hashlib`；大文件按块或 mmap 处理，内存占用为\n  `O(block_size)`。禁止以 `.sh`/`.ps1`/`.js` 作为实现交付，禁止通过 `subprocess` 外置核心解析逻辑。\n",
+          "after": "- Python 3.11+，使用 `struct/pathlib/hashlib`；大文件读写缓冲按块/mmap 管理。\n  IR、索引、解压缓存另计内存，不据 mmap 宣称总体 O(block_size)。禁止以.sh/.ps1/.js交付核心逻辑，禁止经subprocess外置核心解析。\n",
+          "reason": "只修正总体内存断言，保留实现语言与核心逻辑约束。"
+        }
+      ],
+      "result_sha256": "6d2c39eceb451568f913056763eea81f4b8795f2a722f3a6b81c99b9b819bc9e",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "cb5d453af86367af7a5e30a26bb3511c2a1d46da71078d217e18538884bf7fca",
+          "result_sha256": "cb5d453af86367af7a5e30a26bb3511c2a1d46da71078d217e18538884bf7fca",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "baece6d361030a8b4765d84377b333f16f2087b32b36408eabfab02edc3ab0ce",
+          "result_sha256": "baece6d361030a8b4765d84377b333f16f2087b32b36408eabfab02edc3ab0ce",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "vm-evidence",
+      "title": "VM 分析与理解等级",
+      "path": "references/details/vm-evidence.md",
+      "start_line": 178,
+      "end_line": 261,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 180,
+          "end_line": 182,
+          "before": "反汇编前必须逆向目标 VM 并产出 `vm_analysis.md`，它是后续一切解析与重建的唯一真值源。内容：\n体系结构（堆栈/寄存器）、指令编码风格、解码流程（如何切分操作码与操作数、大小端、对齐、\n定长/变长）。\n",
+          "after": "字节码反汇编前调查目标 VM 并产出 `vm_analysis.md`，作为证据台账；源字节仍是保真基准。\n纯数据资源做结构分析，不伪造 VM。记录体系结构、指令编码、大小端、对齐、定长/变长和边界依据。\n",
+          "reason": "澄清多个唯一真值源及纯数据场景。"
+        },
+        {
+          "start_line": 194,
+          "end_line": 195,
+          "before": "Tier 单调：申报 `T3` 意味着同时满足 `T0..T2`。每个区域必填 tier 与**至少两条独立证据**\n（`T0` 可空），两条中至少一条为 `observed` 或 `derived`。\n",
+          "after": "较高等级须具备相应边界与语义证据；非 VM 数据可由结构字段证明 T2，不伪造定长 cell。\n每区记可追溯证据，优先独立交叉验证，至少一条 observed/derived（T0 可无语义证据）；缺交叉证据明示。\n",
+          "reason": "固定证据条数不能代替独立性。"
+        },
+        {
+          "start_line": 214,
+          "end_line": 214,
+          "before": "允许申报的能力由参与操作的**所有**区域的最低 tier 决定：\n",
+          "after": "允许申报的能力由本次操作**影响闭包**的区域与依赖证据决定，不由无关区域的最低 tier 否决：\n",
+          "reason": "能力按真实影响范围判断。"
+        },
+        {
+          "start_line": 219,
+          "end_line": 219,
+          "before": "| 零编辑逐字节往返 | T1 | 全部 cell/opaque 可原样重写 |\n",
+          "after": "| 零编辑逐字节往返 | T0 | 全部原始字节可原样重放 |\n",
+          "reason": "T0 即可完成无编辑保真。"
+        },
+        {
+          "start_line": 223,
+          "end_line": 223,
+          "before": "| `full-layout` 重排 | T3 | 全部指针/跳转/表容量/校验依赖已解析 |\n",
+          "after": "| `full-layout` 重排 | 数据 T2 / 指令布局 T3 | 全部指针/跳转/表容量/校验依赖已解析 |\n",
+          "reason": "数据布局不需虚报指令级理解。"
+        },
+        {
+          "start_line": 226,
+          "end_line": 227,
+          "before": "反向也是硬规则：**tier 不足即不得执行该能力。** 用户要 `full-layout` 而只到 T2 时，正确响应是\n给 `pointer-rewrite` 或说明缺哪类证据，不是降低验证标准。\n",
+          "after": "反向仍是硬规则：**影响闭包证据不足即不得执行能力。** 数据重排需 T2 结构证据；\n指令布局需 T3，控制流修改/指令增删需 T4。说明缺项，不以策略回退掩盖未知依赖。\n",
+          "reason": "区分数据、指令布局和控制流改动。"
+        }
+      ],
+      "result_sha256": "fce7ebbf40850dfc4f981da12eb7a478e099f25650625c835f7d48e8416e9eeb",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "0c5a82788fc498464b115e6119ec5865c2218a9b4ae5a46b506ff9b63c7eb82d",
+          "result_sha256": "0c5a82788fc498464b115e6119ec5865c2218a9b4ae5a46b506ff9b63c7eb82d",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "ir-layout",
+      "title": "IR、布局与双编辑面",
+      "path": "references/details/ir-layout.md",
+      "start_line": 262,
+      "end_line": 504,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 339,
+          "end_line": 340,
+          "before": "- `manifest.jsonl` 每源记录它在各 JSONL 中的**行区间** `[start_line, end_line)`，单源操作直接\n  seek 到区间，不必解析整库。\n",
+          "after": "- manifest 每源记录 JSONL 行区间和对应字节偏移；有字节索引时直接 seek。\n  只有行号须顺序定位，不能把可变宽 JSONL 的行号当字节偏移。\n",
+          "reason": "保留合库索引设计，修正不可执行的按行 seek。"
+        },
+        {
+          "start_line": 364,
+          "end_line": 364,
+          "before": "- 单文件输入也建 `ir/manifest.jsonl`（一行），产物布局与批量完全相同。\n",
+          "after": "- 单文件也建同构内存 manifest；显式导出或临时验证快照时写 `ir/manifest.jsonl`，默认不持久落盘。\n",
+          "reason": "打通默认无IR与独立门禁输入。"
+        },
+        {
+          "start_line": 420,
+          "end_line": 421,
+          "before": "两个编辑面同时可改，必须解决\"改动如何合并\"与\"冲突如何检出\"。做法是**渲染一份新鲜投影再 diff**，\n而非解析用户文件：\n",
+          "after": "先渲染新鲜投影进行 diff 定位变化，再以受限语法和稳定对象 ID 解析成 ChangeSet，\n分别校验两个编辑面的权限与引用；不能把行差异本身当作语义解析。\n",
+          "reason": "保留双面diff设计，补齐解析与信任边界。"
+        },
+        {
+          "start_line": 429,
+          "end_line": 430,
+          "before": "    asm_edits  = diff(asm_fresh, asm_user)   # 仅用户实际改动的行\n    text_edits = diff(text_fresh, texts_user)\n",
+          "after": "    asm_edits  = parse_changed_asm(diff(asm_fresh, asm_user), ir)\n    text_edits = validate_text_edits(diff(text_fresh, texts_user), ir)\n",
+          "reason": "示例补齐 diff 到可信 ChangeSet 的转换。"
+        },
+        {
+          "start_line": 438,
+          "end_line": 438,
+          "before": "    apply(ir, asm_edits)                     # 按行首偏移定位 IR 对象\n",
+          "after": "    apply(ir, asm_edits)                     # 按稳定对象 ID，旧偏移仅作校验\n",
+          "reason": "移动/新增对象不能仅靠旧偏移。"
+        },
+        {
+          "start_line": 444,
+          "end_line": 445,
+          "before": "- **无需完整的 ASM 解析器**：只解析改动的若干行，行首偏移映射回 IR 对象即一次字典查找；转义、\n  引号、共享标记的歧义处理全部不必编写。\n",
+          "after": "- **无需完整通用 ASM 编译器**：可以只支持明确的编辑子集，但仍须解析引号、转义、共享、\n  字段类型及引用；未实现的增删/重排要拒绝，不忽略或猜测。\n",
+          "reason": "修正无需任何歧义处理的过度承诺，不删除轻量实现方案。"
+        },
+        {
+          "start_line": 448,
+          "end_line": 448,
+          "before": "- **未改动路径零风险**：只改文本时 asm 分支整个跳过。\n",
+          "after": "- **未改动路径不重复编辑**：验证源身份和投影基线哈希后可跳过 ASM 编辑解析，不声称零风险。\n",
+          "reason": "缓存必须绑定身份。"
+        }
+      ],
+      "result_sha256": "95b07449cf07137022e44f588914c81b5bacedf0b3e4e0b5f18e5e4771b8e363",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "79d75702c671338a82791f3336ba9da827824de6e50f4f6d08b0d2fa7fceebab",
+          "result_sha256": "79d75702c671338a82791f3336ba9da827824de6e50f4f6d08b0d2fa7fceebab",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "59ecc7b29fb13d2d26358fbe08154c6ae6ab077e1fa809542b9ba68db7afd42b",
+          "result_sha256": "59ecc7b29fb13d2d26358fbe08154c6ae6ab077e1fa809542b9ba68db7afd42b",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 3,
+          "language": "text",
+          "source_sha256": "b7b273bdedb641e5a8d2e44e60fc55325d5f5a0294ac080c331cd97fcd2ab472",
+          "result_sha256": "b7b273bdedb641e5a8d2e44e60fc55325d5f5a0294ac080c331cd97fcd2ab472",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 4,
+          "language": "text",
+          "source_sha256": "eae69ffc53443abbac6efcb9b2646281b640a029064fe1effdf5a90d59b9174a",
+          "result_sha256": "eae69ffc53443abbac6efcb9b2646281b640a029064fe1effdf5a90d59b9174a",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 5,
+          "language": "text",
+          "source_sha256": "bd1a96c873f9bbed2ea143188bdb6473654f4d671d48a86282cde79cde87d1f1",
+          "result_sha256": "bd1a96c873f9bbed2ea143188bdb6473654f4d671d48a86282cde79cde87d1f1",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 6,
+          "language": "python",
+          "source_sha256": "4a498a72b2b19911c31002ea76065f04897a22293f3efbb7d6b50b1a855322d5",
+          "result_sha256": "377f02abe54a7ca5997c8d4867b0ff550163fa6fd52b3a7b41eed2e3127776b3",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 7,
+          "language": "json",
+          "source_sha256": "4b35a2d94a2c3491fc674d310a4f52e02a2c40786b2fdfd5958d93cfef076aab",
+          "result_sha256": "4b35a2d94a2c3491fc674d310a4f52e02a2c40786b2fdfd5958d93cfef076aab",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "reference-joins",
+      "title": "引用连接",
+      "path": "references/details/reference-joins.md",
+      "start_line": 505,
+      "end_line": 580,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 505,
+          "end_line": 508,
+          "before": "## 3. 引用连接：文本发现的唯一合法机制\n\n铁律 2 禁止旁路扫描，这节是替代品。**严禁用正则从二进制抓文本**，所有信息经结构化方式提取——\n即引用连接：一个可判定的等值关系，A 文件某位置存的值等于 B 中某结构对象的身份键。\n",
+          "after": "## 3. 引用连接：跨对象文本发现与重定位\n\n内联文本可以由已解析的结构字段证明；跨对象文本用已证明的引用连接发现。\n扫描只提供待证候选，不能直接授权。引用连接是源槽位值与目标结构身份键之间可验证的等值关系。\n",
+          "reason": "保留整个引用机制，补齐内联结构文本。"
+        },
+        {
+          "start_line": 577,
+          "end_line": 577,
+          "before": "仅被一个提取器命中的锚点置信度不得高于 `inferred`。\n",
+          "after": "仅单一提取器命中时复核缺少共识的原因；已有独立结构/宿主证据可支持 derived，不机械按提取器数量降级。\n",
+          "reason": "多份相同算法不等于独立证据。"
+        }
+      ],
+      "result_sha256": "5446955e4fa9c94337e21e51e8a21992f6f4c2cbdfe19d548d4932757cbab0d3",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "cfe8defa3c62a407cb3d30dc24e5697ba3b78e63af38702042922af12efacffe",
+          "result_sha256": "cfe8defa3c62a407cb3d30dc24e5697ba3b78e63af38702042922af12efacffe",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "82504cee4a0093143cc42a625239257d58d72ca377c1bfe8be130f8564cbd8a0",
+          "result_sha256": "82504cee4a0093143cc42a625239257d58d72ca377c1bfe8be130f8564cbd8a0",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 3,
+          "language": "text",
+          "source_sha256": "a89001cda71a6dad4f1ba8eb13453b847c0bb7fc44e52b13eb3c24e93cf213fd",
+          "result_sha256": "a89001cda71a6dad4f1ba8eb13453b847c0bb7fc44e52b13eb3c24e93cf213fd",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "text-protocol",
+      "title": "文本、人名、编码与双行格式",
+      "path": "references/details/text-protocol.md",
+      "start_line": 581,
+      "end_line": 836,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 665,
+          "end_line": 667,
+          "before": "**不可解码字节禁止静默兜底。** `errors=\"surrogateescape\"`/`\"replace\"` 会让这些字节在后续任何\n一次重新编码中被静默改写且不留证据。核心路径禁用。该条目改为 `parse_status=undecodable`、保留\n`raw_bytes` 与 `raw_sha256`、强制 `frozen`、以占位符逐字节呈现。\n",
+          "after": "**不可解码字节禁止静默 replace/ignore。** surrogateescape 在同 codec/错误处理链下可以无损，\n但跨序列化/编辑器有风险；默认标 undecodable、保留 raw_bytes/raw_sha256、冻结并显示占位符。\n内部使用 surrogateescape 时须测试全链路，不能把不可显示代理字符直接交给译者。\n",
+          "reason": "纠正编码事实，保持无损与冻结要求。"
+        },
+        {
+          "start_line": 772,
+          "end_line": 772,
+          "before": "推论：预填后**不得**再将空译文行视为合法输入。空的 `●` 行表示内容被误删，须拒绝并报出 idx。\n",
+          "after": "原本非空的译文被清空须拒绝并指出 idx；原文合法为空且未编辑时允许零编辑导入。\n",
+          "reason": "保留空译文保护但不误拒合法空原文。"
+        },
+        {
+          "start_line": 824,
+          "end_line": 824,
+          "before": "6  分隔符未混用                    13  译文行非空（空 = 误删，不是\"未翻译\"，§4.6）\n",
+          "after": "6  分隔符未混用                    13  原本非空译文不得被清空，合法空原文可原样导入\n",
+          "reason": "导入清单空值条件一致。"
+        },
+        {
+          "start_line": 828,
+          "end_line": 829,
+          "before": "第 13 条的存在依赖导出时预填原文：既然每条一开始就有内容，空行只可能是误删，必须报错并指出 idx。\n把它当作\"未翻译\"会让误删静默变成把空串写回目标文件。\n",
+          "after": "原本非空条目被清空是误删，不能当作未翻译；原本合法空值不属于该拒绝条件。\n",
+          "reason": "不破坏空原文的零编辑恒等。"
+        }
+      ],
+      "result_sha256": "9c25dfa68f3558930d6be6d87bee3fc0405e5ce34005f315d3fdbcd2248b42b0",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "982faab923fe2f4b13d7500984d760b482771d73a06f0ab35b4d42f55a8bb58d",
+          "result_sha256": "982faab923fe2f4b13d7500984d760b482771d73a06f0ab35b4d42f55a8bb58d",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "ef56a0fa1ab52de552aa6e7152f0e67f2f509e4677d0b0ce7c9f4eb2774de789",
+          "result_sha256": "ef56a0fa1ab52de552aa6e7152f0e67f2f509e4677d0b0ce7c9f4eb2774de789",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 3,
+          "language": "text",
+          "source_sha256": "ea60359dfa44f8d3dcc1351f53cd1a3b78a14c3a9f3a9d987d7130f21faa4960",
+          "result_sha256": "ea60359dfa44f8d3dcc1351f53cd1a3b78a14c3a9f3a9d987d7130f21faa4960",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 4,
+          "language": "text",
+          "source_sha256": "6c4996035acfc2e0fd2266d462f8bf3b7719bf68c120e6ca5a581d613941bed5",
+          "result_sha256": "6c4996035acfc2e0fd2266d462f8bf3b7719bf68c120e6ca5a581d613941bed5",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 5,
+          "language": "text",
+          "source_sha256": "f51bab07674269fc8b05977f04d3baf2085ee38491e794e20c293235f44b049a",
+          "result_sha256": "f51bab07674269fc8b05977f04d3baf2085ee38491e794e20c293235f44b049a",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 6,
+          "language": "text",
+          "source_sha256": "f098dc2d60870bc3f8080c6463ae74979961aea0f2d27f410462bd089924f114",
+          "result_sha256": "f098dc2d60870bc3f8080c6463ae74979961aea0f2d27f410462bd089924f114",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 7,
+          "language": "text",
+          "source_sha256": "f4b2f740510b7c61c42df286497f7eb8d49c89f7740b9dd9b2429070b54f36b5",
+          "result_sha256": "f4b2f740510b7c61c42df286497f7eb8d49c89f7740b9dd9b2429070b54f36b5",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 8,
+          "language": "text",
+          "source_sha256": "af0b75d70b99e57dfa73e8b919c5d8400f68c34a9f7f17632f0c9c7c1b275b8a",
+          "result_sha256": "af0b75d70b99e57dfa73e8b919c5d8400f68c34a9f7f17632f0c9c7c1b275b8a",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 9,
+          "language": "text",
+          "source_sha256": "28c2a866b487d410162cdbeda39818088b06435549bbe85eadedfe1a7058485c",
+          "result_sha256": "28c2a866b487d410162cdbeda39818088b06435549bbe85eadedfe1a7058485c",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 10,
+          "language": "text",
+          "source_sha256": "13e7e6fa1a0c8196ab3b20239bbc4f9583705a8c6f6b9cae34bc09e428d32142",
+          "result_sha256": "641df01c63b1b46e0b6a432d4b267f7fce30aa103108750d41d8c7af75722bcc",
+          "status": "corrected"
+        }
+      ]
+    },
+    {
+      "name": "asm",
+      "title": "ASM 视图",
+      "path": "references/details/asm.md",
+      "start_line": 837,
+      "end_line": 886,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 853,
+          "end_line": 853,
+          "before": "- **每行带定位信息**：行首的偏移是改动映射回 IR 对象的依据。缺它则 diff 出的改动无法定位。\n",
+          "after": "- **每个可编辑记录带稳定 ID/标签和定位信息**：旧偏移用于来源校验，不能只靠行号映射。\n",
+          "reason": "修正按行首旧偏移定位的局限。"
+        },
+        {
+          "start_line": 869,
+          "end_line": 869,
+          "before": ".tier     \"T2\"\n",
+          "after": " .tier     \"T3\"\n",
+          "reason": "ASM例含真实指令，应为T3，不伪装T2。"
+        },
+        {
+          "start_line": 872,
+          "end_line": 873,
+          "before": "    LOAD    R1, 0x1234\n    CALL.PRINT_TEXT    loc_00001000        ; 引用 idx=00000001，站点 join_id=J0001\n",
+          "after": "    LOAD    R1, 0x1234                    ; object_id=I0001\n    CALL.PRINT_TEXT    loc_00001000       ; object_id=I0002，idx=00000001，join_id=J0001\n",
+          "reason": "原指令和引用保留，补稳定ID。"
+        }
+      ],
+      "result_sha256": "fe258134062cf3d8e459c445afbbc9a903997a6b346f52b1d508f785bd20c725",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "2b8ad13a63a76f3ab97372fbea9b8099b60dedf52365cb99e9b0337bb3ae9368",
+          "result_sha256": "2b8ad13a63a76f3ab97372fbea9b8099b60dedf52365cb99e9b0337bb3ae9368",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "asm",
+          "source_sha256": "58697c3c510f6254f8b3b1599081f4f78ddae7abc2ac8271812b6c5958b28b00",
+          "result_sha256": "6a89b49d22fc229640eae7ab68075ba6b13038fad22b68d9d12334c8440a3155",
+          "status": "corrected"
+        }
+      ]
+    },
+    {
+      "name": "repack",
+      "title": "回封策略与事务",
+      "path": "references/details/repack.md",
+      "start_line": 887,
+      "end_line": 1117,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 891,
+          "end_line": 891,
+          "before": "| `identity` | T1 | 无（零编辑往返） | cell 切分或 opaque 边界 |\n",
+          "after": "| `identity` | T0 | 无（零编辑往返） | 原始字节区间可原样保留 |\n",
+          "reason": "identity无需T1。"
+        },
+        {
+          "start_line": 894,
+          "end_line": 894,
+          "before": "| `full-layout` | T3 | 结构重排、条目增删、跨层尺寸变化 | 全部指针/跳转/表容量/校验依赖 |\n",
+          "after": "| `full-layout` | 数据 T2 / 指令布局 T3 | 结构重排、跨层尺寸变化；控制流/指令增删需T4 | 全部指针/跳转/表容量/校验依赖 |\n",
+          "reason": "布局能力按对象性质。"
+        },
+        {
+          "start_line": 905,
+          "end_line": 910,
+          "before": "| `asm.txt` 的指令、数据或结构 | `full-layout` | **T3** |\n| 两个编辑面均无改动 | `identity` | T1 |\n\n**改 asm 结构需 T3**，因为要重算跳转目标与表容量；改字符串只需 T2，因为只需回填引用槽。工具按\n文件哈希判定 `asm.txt` 是否被改动，改动了结构而 tier 不足时**明确拒绝并说明缺哪类证据**，而不是\n尝试后失败（§6.1 的 `TIER_TOO_LOW`）。\n",
+          "after": "| `asm.txt` 的数据结构 / 指令布局 | `full-layout` | 数据 T2 / 指令 T3；指令增删/控制流 T4 |\n| 两个编辑面均无改动 | `identity` | T0 |\n\n纯数据布局不要求伪造指令；指令布局与控制流改动分别要求对应证据。工具绑定源哈希及编辑对象，\n遇到影响闭包证据不足时拒绝并指出缺项（TIER_TOO_LOW），而不是先尝试生成疑似损坏文件。\n",
+          "reason": "整合表与解释，保留所有编辑路径。"
+        },
+        {
+          "start_line": 917,
+          "end_line": 917,
+          "before": "变长回封    修改后超出原容量          总长度改变，全部引用需重新计算\n",
+          "after": "变长回封    修改后超出原容量          相关布局与引用重新计算，总文件长度可能不变\n",
+          "reason": "大小变化不是编辑成功必要条件。"
+        },
+        {
+          "start_line": 996,
+          "end_line": 996,
+          "before": "□ 站点集合与原集合同构：数量相同，site_offset 一一对应\n",
+          "after": "□ 站点集合与原集合同构：稳定站点身份一一对应，物理偏移按布局映射核验\n",
+          "reason": "站点本身可移动。"
+        },
+        {
+          "start_line": 999,
+          "end_line": 999,
+          "before": "□ 总长度差值等于各条目长度变化之和加对齐调整量（差值可解释，无意外增减）\n",
+          "after": "□ 对应未压缩层解释条目/元数据/对齐增量；封装后另验存储大小，不跨层套用明文求和公式\n",
+          "reason": "长度核验按层。"
+        },
+        {
+          "start_line": 1016,
+          "end_line": 1016,
+          "before": "reason_code ∈ {OK, TIER_TOO_LOW, LENGTH_OVERFLOW, UNRESOLVED_JOIN_SITE, AMBIGUOUS_JOIN_KEY,\n",
+          "after": "reason_code ∈ {OK, EDIT_PRESENT, TIER_TOO_LOW, LENGTH_OVERFLOW, UNRESOLVED_JOIN_SITE, AMBIGUOUS_JOIN_KEY,\n",
+          "reason": "补identity存在编辑的拒绝原因。"
+        },
+        {
+          "start_line": 1043,
+          "end_line": 1043,
+          "before": "   {\"strategy_id\": \"identity\",        \"applicable\": false, \"reason_code\": \"LENGTH_OVERFLOW\",\n",
+          "after": "   {\"strategy_id\": \"identity\",        \"applicable\": false, \"reason_code\": \"EDIT_PRESENT\",\n",
+          "reason": "有编辑不等于必然超长。"
+        },
+        {
+          "start_line": 1077,
+          "end_line": 1078,
+          "before": "- **站点同构验证**：回封后重新解析，比较新旧站点集合——数量相同、`site_offset` 逐一对应、\n  `key_kind` 相同、`key_value` 按映射变化。任一站点消失或新增即拒绝输出并保留失败样本。\n",
+          "after": "- **同构验证**：输出重新解析后，稳定站点身份、key_kind 与目标对应；key_value 和 site_offset\n  按各自布局映射核对。未授权的新增/消失须拒绝并保留失败样本。\n",
+          "reason": "物理偏移不同不等于站点丢失。"
+        }
+      ],
+      "result_sha256": "3f0a676acd043f510d9a67fe4deda593c246da1a178e2b07e727be7b1c7c0f90",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "7d99a588df5f10df0c4d0896b351303cf94dd975f22bf61424ff67f314e1d1fe",
+          "result_sha256": "3c624abaecfbe6b5cf075e5b3f5d83128bf89ef0607f92798b8a0006fb154df1",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "eb9e4aa8a53540c9ec46a4edfcbea3a7368be5f4f7678fa70b46c3ed38ce6990",
+          "result_sha256": "eb9e4aa8a53540c9ec46a4edfcbea3a7368be5f4f7678fa70b46c3ed38ce6990",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 3,
+          "language": "text",
+          "source_sha256": "968c24b4c39066380e5a307f3e53499c8e53255289b538bfb2b64a910db8a86a",
+          "result_sha256": "968c24b4c39066380e5a307f3e53499c8e53255289b538bfb2b64a910db8a86a",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 4,
+          "language": "text",
+          "source_sha256": "2c78d9401aea6dcf2266c4954acf671ae3adb28a741ff667df6f1157d6cbecee",
+          "result_sha256": "2c78d9401aea6dcf2266c4954acf671ae3adb28a741ff667df6f1157d6cbecee",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 5,
+          "language": "text",
+          "source_sha256": "24cabad31a6b7a376fe1074493659fa376e1fc4cc7f069c99ed04544ec20f78a",
+          "result_sha256": "408e3a15e355e3cf8880b510c06e828523c1b9800873389d3c854588d1fd5e05",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 6,
+          "language": "python",
+          "source_sha256": "957c741b30c3f943326dcaad65dcc4305bd0335188481470aca45c471cd39a8b",
+          "result_sha256": "957c741b30c3f943326dcaad65dcc4305bd0335188481470aca45c471cd39a8b",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 7,
+          "language": "text",
+          "source_sha256": "4962e6f15bb3168668646f5779dc91cc29b76901c6083816ffdc9a3fb07db322",
+          "result_sha256": "19656a43c57d8e2a8619607dc987ff50602a94de79d6cfc16879cf02a7c82a06",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 8,
+          "language": "json",
+          "source_sha256": "af677441fd9f48b8ec38582735c6ff168769ad6604d0ce165aedd277242ea85f",
+          "result_sha256": "56fea08697ade9ea427db8960a3e7f7ec0a9b4fb56e43d9ff06fd39f5408a723",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 9,
+          "language": "python",
+          "source_sha256": "54321b40133555bfb079bc7d9d17bc7ea734d96b740454a1f6140cab2b4b978e",
+          "result_sha256": "54321b40133555bfb079bc7d9d17bc7ea734d96b740454a1f6140cab2b4b978e",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 10,
+          "language": "text",
+          "source_sha256": "7b109619cbc97efa2ef5f24cfefcf02f6c220e863f3d464e5fc84b9702c53760",
+          "result_sha256": "7b109619cbc97efa2ef5f24cfefcf02f6c220e863f3d464e5fc84b9702c53760",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 11,
+          "language": "text",
+          "source_sha256": "4707fc8f447d60411d4664edc148debd35f1a05c8dc22fb6fd2bac9358d777d8",
+          "result_sha256": "4707fc8f447d60411d4664edc148debd35f1a05c8dc22fb6fd2bac9358d777d8",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "dialect",
+      "title": "声明式方言与形态派发",
+      "path": "references/details/dialect.md",
+      "start_line": 1118,
+      "end_line": 1343,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 1134,
+          "end_line": 1135,
+          "before": "**硬规则：结构逻辑代码中不得出现引擎特定的魔数、opcode 值、调用 ID 或文本正则。** 这条可机械\n检查——在 profile 模块中搜索十六进制字面量与正则字符串，命中即违规。\n",
+          "after": "**硬规则：引擎特定魔数/opcode/调用ID/分类正则须声明化。** 字面量扫描用于初筛，\n通用掩码、产物语法等不能仅凭外观判违规，须核对用途与豁免理由。\n",
+          "reason": "保留方言分层，修正启发式误拒。"
+        },
+        {
+          "start_line": 1171,
+          "end_line": 1171,
+          "before": "        0x10: {\"mnemonic\": \"CALL\", \"length\": 5,\n",
+          "after": "        0x10: {\"mnemonic\": \"CALL\", \"length\": 6,\n",
+          "reason": "opcode1+subopcode1+offset4应为6字节。"
+        },
+        {
+          "start_line": 1182,
+          "end_line": 1182,
+          "before": "         \"tag\": \"misc\", \"tag_source\": \"heuristic\", \"confidence\": \"inferred\"}],\n",
+          "after": "         \"tag\": \"misc\", \"tag_source\": \"unresolved\", \"confidence\": \"inferred\"}],\n",
+          "reason": "misc契约是角色未证明，不能同时声称角色由heuristic确定。"
+        },
+        {
+          "start_line": 1273,
+          "end_line": 1275,
+          "before": "    for shape in dialect.entry_shapes:          # 声明顺序即判定顺序\n        if shape.matches(doc, entry_off):       # 纯谓词，不产生副作用\n            return shape.extract(doc, entry_off)\n",
+          "after": "    matched = [s for s in dialect.entry_shapes if s.matches(doc, entry_off)]\n    if len(matched) > 1:\n        raise AmbiguousEntryShape(offset=entry_off, candidates=[s.id for s in matched])\n    if matched:\n        return matched[0].extract(doc, entry_off)\n",
+          "reason": "保留形态派发代码，补多命中歧义拒绝。"
+        },
+        {
+          "start_line": 1332,
+          "end_line": 1332,
+          "before": "□ 全部既有样本的产出条数**完全不变**（实测为 66,334 条前后一致）\n",
+          "after": "□ 既有样本条数、内容、角色、绑定不变；若修复旧漏提，记录预期差异后更新基线（历史例66,334条）\n",
+          "reason": "计数之外也核验语义映射。"
+        }
+      ],
+      "result_sha256": "f830f8d63f8bbac0710a3b384ac1bd7d51cb0f47333ea4830ecaa5662db6e4b3",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "7a9275bf393979de709a42c674e0ca7e1ee95dac295e8159ad200d0e8b86e22a",
+          "result_sha256": "7a9275bf393979de709a42c674e0ca7e1ee95dac295e8159ad200d0e8b86e22a",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "python",
+          "source_sha256": "f4c03827147305b67ad7d206d6e2cc065855b9d1967f2598202f3280bd2ed186",
+          "result_sha256": "d498d9077e3c5203efbfc04595cdee415d0c3e55a965004dfaffde39214f3ca2",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 3,
+          "language": "markdown",
+          "source_sha256": "a0ca377f2efe0425f13eaaf6bd851004ca503254c7ffe5546487b3be96c30c54",
+          "result_sha256": "a0ca377f2efe0425f13eaaf6bd851004ca503254c7ffe5546487b3be96c30c54",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 4,
+          "language": "text",
+          "source_sha256": "89df8152e1c3c932cf944230e9d0ecbd4e3f563ed74de08e4e05484b817b1acb",
+          "result_sha256": "89df8152e1c3c932cf944230e9d0ecbd4e3f563ed74de08e4e05484b817b1acb",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 5,
+          "language": "json",
+          "source_sha256": "b6797f57925514ecc0babb8e154d137ac880340e9f6b681f05d324b937dfa4cd",
+          "result_sha256": "b6797f57925514ecc0babb8e154d137ac880340e9f6b681f05d324b937dfa4cd",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 6,
+          "language": "python",
+          "source_sha256": "5bc501e334cd15085269b69c675a59c55e88bd4a7f119a2921c86c0234c9c7ee",
+          "result_sha256": "7a86d0649eddc8a1caf8a1b91b110d0d78c679704f576faf36e53acaa6679922",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 7,
+          "language": "text",
+          "source_sha256": "ca414e41dc7148bef3dbc581cedb413f0ddf384b9302767db4befc7c4233c631",
+          "result_sha256": "ca414e41dc7148bef3dbc581cedb413f0ddf384b9302767db4befc7c4233c631",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 8,
+          "language": "text",
+          "source_sha256": "81d5c5bac8aa7139b52d66ad7ca32f9060a8acefeb5596a760992cbf38cbc424",
+          "result_sha256": "81d5c5bac8aa7139b52d66ad7ca32f9060a8acefeb5596a760992cbf38cbc424",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 9,
+          "language": "text",
+          "source_sha256": "edcedb65656c7afb01e56787f9d165bd2cc45703237a1669c7ef37b271e6e481",
+          "result_sha256": "7515ad668dd9239e2f1ad6591b65b9be790e16599f320684abffbda26f10cf0f",
+          "status": "corrected"
+        }
+      ]
+    },
+    {
+      "name": "gates",
+      "title": "覆盖证书与门禁",
+      "path": "references/details/gates.md",
+      "start_line": 1344,
+      "end_line": 1495,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 1349,
+          "end_line": 1351,
+          "before": " \"byte_coverage\": 1.0, \"structural_coverage\": 1.0,\n \"tier_coverage\": {\"T0\": 0, \"T1\": 0, \"T2\": 0, \"T3\": 0, \"T4\": 0},\n \"min_tier\": \"T1\", \"declared_capabilities\": [\"roundtrip\", \"in_place\"],\n",
+          "after": " \"byte_coverage\": 1.0, \"structural_coverage\": 0.0,\n \"tier_coverage\": {\"T0\": 0, \"T1\": 0, \"T2\": 0, \"T3\": 0, \"T4\": 0},\n \"min_tier\": null, \"declared_capabilities\": [],\n",
+          "reason": "零大小结构示意不虚报T1/原地编辑能力；实证书填真实范围。"
+        },
+        {
+          "start_line": 1374,
+          "end_line": 1374,
+          "before": "### 8.1 严格成功的充要条件\n",
+          "after": "### 8.1 严格成功的必要验证条件\n",
+          "reason": "静态清单不能称运行时正确的充要证明。"
+        },
+        {
+          "start_line": 1381,
+          "end_line": 1383,
+          "before": "□ declared_capabilities ⊆ min_tier 允许集合（§1.3）\n□ instruction_coverage 仅在 min_tier>=T3 时为数值且须为 1.0，否则 not_applicable\n□ byte_coverage == structural_coverage == 1.0（与 tier 无关）\n",
+          "after": "□ declared_capabilities 的作用域区域满足门槛，并证明影响闭包依赖（§1.3）\n□ 数值 instruction_coverage = T3/T4 区域字节数 / 全源字节数；无指令可 not_applicable\n□ byte_coverage == 1.0；structural_coverage 独立申报定义，不由字节覆盖推定\n",
+          "reason": "分开字节/结构/指令覆盖，按操作作用域判断能力。"
+        },
+        {
+          "start_line": 1397,
+          "end_line": 1397,
+          "before": "规则能机械检查的就不要只写在文档里。本技能自带七个门禁脚本，交付前须全部通过（退出码 0）：\n",
+          "after": "七个门禁的本次适用项须真实通过；不适用须列原因，必要但未验证不能算通过。以下保留所有调用入口：\n",
+          "reason": "不为未请求的可选产物伪造验证输入。"
+        },
+        {
+          "start_line": 1402,
+          "end_line": 1402,
+          "before": "                                      --baseline reports/shapes_baseline.json\n",
+          "after": "                                      --baseline reports/shapes_baseline.json --corpus-manifest validation/corpus.json\n",
+          "reason": "corpus-wide绑定独立语料清单。"
+        },
+        {
+          "start_line": 1406,
+          "end_line": 1408,
+          "before": "python scripts/check_dsat.py          ir/ texts/\npython scripts/check_sites.py         SAMPLE rebuilt/SAMPLE ir/join_sites.jsonl \\\n                                      --relocation-log reports/relocation_log.jsonl\n",
+          "after": "python scripts/check_dsat.py          validation/ir/ texts/ --target-encoding cp932\npython scripts/check_sites.py         SAMPLE rebuilt/SAMPLE validation/join_sites.jsonl \\\n                                      --layout-map validation/layout-map.jsonl --rebuilt-sites validation/rebuilt-sites.jsonl\n",
+          "reason": "门禁临时快照、可信编码、变长映射及同构输入；cp932只是例子。"
+        },
+        {
+          "start_line": 1414,
+          "end_line": 1414,
+          "before": "| `check_output_sanity.py` | §0.1 产出合理性 | 必需类别为 0、单一类别占比 >95%、抽出条数与容器对象数量级不符、跨样本密度差一个数量级 |\n",
+          "after": "| `check_output_sanity.py` | §0.1 产出合理性 | 证据支持的必需类别缺失/数量级失配；95%偏斜及密度变化为advisory |\n",
+          "reason": "准确区分启发式与失败。"
+        },
+        {
+          "start_line": 1418,
+          "end_line": 1419,
+          "before": "| `check_dsat.py` | §4.6 / §4.9 全部 13 条 | 改原文行、改 idx/tag、idx 非定宽、混用 `○●`、删行、译文行空、整块交换、换文件头哈希、缺分片、改 `frozen`、占位符破损或小写、译文超长、目标编码不可表示 |\n| `check_sites.py` | §6.3 按站点不按值 | 值碰撞常量被改写（等长与变长两种输出均检查）、站点集合不同构、差异范围无法追溯到 `join_id` |\n",
+          "after": "| `check_dsat.py` | §4.6/§4.9已实现输入契约，范围见validation.md | 原文/tag/权限/分片/占位符/编码等；不宣称实现任意引擎终止符语义 |\n| `check_sites.py` | §6.3 站点及字节范围检查 | 站点值错、映射/保持区损坏、完整差异覆盖失败；同构需重解析站点输入 |\n",
+          "reason": "不夸大门禁范围，保留检查职责。"
+        },
+        {
+          "start_line": 1444,
+          "end_line": 1447,
+          "before": "- `check_sites.py` 的值碰撞检查在变长输出下改用**计数法**（比较某旧键在站点集合外的出现次数），\n  等长输出下用偏移法（可报出精确偏移）。变长时差异范围归属检查默认跳过并在报告中记\n  `diff_attribution=skipped-length-changed`，因为插入会使其后每个字节都不同；需强制检查时加\n  `--strict-diff`。\n",
+          "after": "- `check_sites.py` 等长用允许区间并集完整覆盖每个改动字节；变长提供 old/new 布局映射，\n  preserve段逐字节核验，changed段记录原因。缺映射返回not_verified/2，\n  不再以计数法或跳过归因当成功；同构检查另需 --rebuilt-sites。\n  完整当前schema与参数见 references/validation.md。\n",
+          "reason": "替换已证实会错误放行的旧变长检查契约。"
+        },
+        {
+          "start_line": 1449,
+          "end_line": 1450,
+          "before": "七个脚本均只读输入、以 JSON 报告结果、退出码 0/1，可直接接入 CI 或 `pytest`。**不得为了通过门禁\n放宽脚本判据**——门禁失败说明实现有问题，或该规则确实需要修订（那要连同 SKILL.md 一起改）。\n",
+          "after": "七个脚本只读输入，JSON报告，退出码 pass=0 / fail=1 / not_verified=2，可接CI/unittest。\n不得为通过而削弱规则；修正规则必须同时更新文档和正负对照。\n",
+          "reason": "统一三态结果与当前实现。"
+        },
+        {
+          "start_line": 1474,
+          "end_line": 1474,
+          "before": "本技能自带的七个门禁均按此校准过。以 `check_output_sanity.py` 为例：阳性对照取实测那次事故的\n",
+          "after": "以下保留原文的历史校准案例，不等于本次重新执行过该语料；当前结果以实际回归测试为准。\n",
+          "reason": "保留历史经验，不冒称本轮证据。"
+        }
+      ],
+      "result_sha256": "8a3dc6b907468b7e128aff483da6dfe6b4a7ff7f5b2a863af32d46b1bf2d95b1",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "json",
+          "source_sha256": "6ac63b98a271a77601617d013007e7c987e24488e1b79fcef9b00a2a04619ad5",
+          "result_sha256": "71e920e4ebdb2557d295433eb8fa284737ce6dcd78fee97c1811943f1d705f79",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "5c56e0852a61a23787ed055aee5bf4677670c334cd95f2688232c1208f684deb",
+          "result_sha256": "5795d9b330dbb3f1466b1f1fb59652ecf8017514b0d878095564e84c4be40698",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 3,
+          "language": "console",
+          "source_sha256": "538358a76da4ba93ef64eac47e392ad312b9c13fbd39c449a6471045ef9df9e0",
+          "result_sha256": "f0772911034098d76bae4fb69c0720eced00e853ce7857fc47a65c062084c2e3",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 4,
+          "language": "text",
+          "source_sha256": "0ca628eb704a16a5f90fb15df22ea14a4ca2d6f9614a278b84b01c27027e620e",
+          "result_sha256": "0ca628eb704a16a5f90fb15df22ea14a4ca2d6f9614a278b84b01c27027e620e",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "verification",
+      "title": "零突变与编辑验证",
+      "path": "references/details/verification.md",
+      "start_line": 1496,
+      "end_line": 1554,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 1506,
+          "end_line": 1506,
+          "before": "零编辑通过后，§8.2 的七个门禁脚本须全部返回退出码 0，方可视为交付合格。\n",
+          "after": "零编辑后执行本次适用门禁，必要项未验证不算交付。仅提取请求不强制另造回封器，也不宣称通过回封验证。\n",
+          "reason": "局部请求不扩大；完整工具检查仍必需。"
+        },
+        {
+          "start_line": 1514,
+          "end_line": 1514,
+          "before": "# 输出与原件长度不同 —— 长度相同才说明编辑未生效\n",
+          "after": "# 重解析验证新文本确实生效；容量、对齐、压缩可能使总长度不变\n",
+          "reason": "保留变长测试代码，纠正错误断言。"
+        },
+        {
+          "start_line": 1528,
+          "end_line": 1528,
+          "before": "| 文本篡改 | 改原文行 / 改 idx / 改 tag / 混用 `○●` / 删一行 / 交换两组 / 换文件头哈希 / 少交一片 / 改 `frozen` 条目——每种都被拒绝并报出精确位置 |\n",
+          "after": "| 文本篡改 | 改原文/idx/tag、混用○●、删行、错锚、换头哈希、缺片、跨片重复/遗漏、改frozen均须拒绝；稳定ID完整重排不等于篡改 |\n",
+          "reason": "保留篡改负例，区分合法重排与错位。"
+        },
+        {
+          "start_line": 1529,
+          "end_line": 1529,
+          "before": "| 编码 | 不可解码字节往返逐字节一致、以占位符呈现、`frozen`；核心路径无 `surrogateescape`/`replace` |\n",
+          "after": "| 编码 | 不可解码字节保留/占位符/frozen；无静默replace/ignore，surrogateescape若用须验证完整链路 |\n",
+          "reason": "编码事实校订。"
+        },
+        {
+          "start_line": 1536,
+          "end_line": 1537,
+          "before": "| **变长** | 长度差值等于各条目变化量之和加对齐调整量；出现无法解释的增减即失败 |\n| **变长** | 批量场景下只编辑一个文件：该文件长度改变，其余文件**逐字节不变** |\n",
+          "after": "| **变长** | 对应未压缩层解释条目/元数据/对齐变化；封装后另验存储大小 |\n| **变长** | 单文件改动的目标内容生效，其余无依赖影响文件逐字节不变，不要求总大小改变 |\n",
+          "reason": "长度和跨源影响限定。"
+        },
+        {
+          "start_line": 1548,
+          "end_line": 1548,
+          "before": "| 方言 | profile 模块中机械搜索十六进制字面量与正则，零命中；缺 `evidence_refs` 的锚点被拒加载 |\n",
+          "after": "| 方言 | 引擎专有字面量已声明化、通用字面量经审阅；缺evidence_refs锚点拒绝加载 |\n",
+          "reason": "启发式扫描不是所有常量都禁止。"
+        }
+      ],
+      "result_sha256": "cd98ffbf3496293d12a944d0c49f1d3a784d5a33c330e343cd0edf1a406a324a",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "bash",
+          "source_sha256": "5161b2ce9be1c38abf497333ec8128309bedc56fbd527de0b698c10a0da0f84e",
+          "result_sha256": "5161b2ce9be1c38abf497333ec8128309bedc56fbd527de0b698c10a0da0f84e",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "bash",
+          "source_sha256": "e382b692c23e6be51cf7aa4e32d63b03e00a06691b6f5ac028426671eb10c19d",
+          "result_sha256": "ef5bca0496985dc2a8f54e375dde4343440b8c3f98d39efe3fa450ca868f4baa",
+          "status": "corrected"
+        }
+      ]
+    },
+    {
+      "name": "reporting",
+      "title": "报告纪律",
+      "path": "references/details/reporting.md",
+      "start_line": 1555,
+      "end_line": 1576,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 1567,
+          "end_line": 1568,
+          "before": "- 每阶段收尾给编号选项：提级某区域、深挖某 unknown、加运行时 probe、导出、回封、或停在\n  checkpoint。不提供隐藏的默认 Run-All。\n",
+          "after": "- 范围未明确时给编号选项：提级区域、深挖unknown、运行时probe、导出、回封或checkpoint。\n  已授权的完整操作连续完成，阶段仍可独立重跑，不用隐藏Run-All扩大范围。\n",
+          "reason": "阶段隔离不要求每一步重复问用户。"
+        }
+      ],
+      "result_sha256": "8968e8fffe1925c7065393949c8d007f3a78208647965717d7131b1c09fd8a45",
+      "blocks": []
+    },
+    {
+      "name": "gui",
+      "title": "GUI 完整样式与交互",
+      "path": "references/details/gui.md",
+      "start_line": 1577,
+      "end_line": 1850,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 1591,
+          "end_line": 1592,
+          "before": "- **译文加长不得作为错误呈现。** 变长是本地化的常态（§6.0.1）：probe 判定 `in_place` 不适用时\n  自动改用 `pointer-rewrite` 并照常完成，界面无需提示，「详情」中记录实际所用策略。\n",
+          "after": "- **不能仅因译文加长就报错。** 变长是本地化常态（§6.0.1）：probe 判定 `in_place` 不适用时，\n  自动选择已证明适用的 `pointer-rewrite` 等变长策略，详情记录所用策略；缺少引用或长度依赖证据时，\n  自然语言说明本样本暂不支持变长并中止，不因自动协商而越过 `applicable=false`。\n",
+          "reason": "保留自动变长体验，消除与11.9/11.10中能力门槛相矛盾的无条件成功承诺。"
+        },
+        {
+          "start_line": 1703,
+          "end_line": 1704,
+          "before": "**未改动的编辑面不参与 diff。** 按文件哈希判定：`asm/` 存在但与新鲜渲染一致时跳过 asm 分支，\n省下一次渲染（实测约占单文件耗时两成）。\n",
+          "after": "**未改动编辑面跳过编辑解析。** 用绑定源哈希、编码、方言、渲染器版本的基线投影哈希判断；\n有可信基线才可省重渲染，否则仍需新鲜渲染比较，不能先渲染后声称省了该次渲染。\n",
+          "reason": "补齐缓存前提，保留优化目标。"
+        },
+        {
+          "start_line": 1727,
+          "end_line": 1727,
+          "before": "- 默认值取方言声明（`opcodelist.py`），缺省为 `cp932`。\n",
+          "after": "- 默认取方言声明；图中cp932/gbk为示例。缺少方言默认时确认真实编码，不通用猜CP932。\n",
+          "reason": "默认体验依赖已知配置，不能写错引擎编码。"
+        },
+        {
+          "start_line": 1789,
+          "end_line": 1793,
+          "before": "  - 收到路径后做一次**损坏检测**：路径含 `?` 或 U+FFFD（替换符）时视为已损坏——合法的 Windows\n    文件名不含这两个字符，出现即说明编码链路某处丢了数据。此时**报错并中止**，不得拿损坏路径\n    继续跑（会以「找不到文件」的形式把锅甩给使用者的文件夹名）。提示语须指明原因：「路径含\n    无法用当前代码页表示的字符，拖放通道将其损坏。请改用『选择文件』按钮，或把文件夹改名为\n    纯 ASCII 后重试」。\n",
+          "after": "  - **损坏检测**保留完整Unicode路径并核对存在性与API通道。U+FFFD可属于合法文件名，\n    不得仅凭它判损坏；普通文件名中的?与已知ANSI替换需诊断，设备路径前缀不能无上下文封杀。\n    已证实被替换时中止并提示「拖放通道损坏了路径，请改用『选择文件』按钮，或检查目录名」。\n    缺文件仅报真实路径不存在；不要把合法目录名归咎为乱码。\n",
+          "reason": "保留Unicode拖放和自然语言提示，纠正UFFFD非法断言。"
+        },
+        {
+          "start_line": 1808,
+          "end_line": 1808,
+          "before": "  收到含 `?` 或 U+FFFD 的路径 → 弹错并中止，不出现「找不到文件」式误导。\n",
+          "after": "  已证实通道替换损坏→弹错；真实存在的U+FFFD路径可接受，不误报损坏。\n",
+          "reason": "验收与合法Unicode路径一致。"
+        },
+        {
+          "start_line": 1834,
+          "end_line": 1836,
+          "before": "- **把译文改成明显更长（例如原文的两倍）→ 正常完成**，自动改用变长策略，输出可载入运行，\n  「详情」显示所用策略与长度变化量。这是本地化的主要用例，不得表现为错误。\n- 只改一条译文 → 该文件长度改变、其余文件逐字节不变；不改任何译文 → 全部文件与原件哈希相同。\n",
+          "after": "- **已证明支持变长的样本上，译文改为明显更长（如两倍）→正常完成**，自动选择适用策略；\n  详情记录长度和策略。实际执行宿主加载测试后才报告可载入，不将自解析当运行时验证。\n- 只改一条译文→目标内容生效，其余无依赖影响文件逐字节不变；零编辑全部与原件哈希相同。\n",
+          "reason": "不删变长用例，只纠正无条件成功与文件大小判据。"
+        }
+      ],
+      "result_sha256": "511a0c9dcf23ffd40e069bcc5ee6f83e749137dcbb0e4f5d32f417bf4fc185c6",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "text",
+          "source_sha256": "e27a09ad7842e3d9976b0c2aa15d52b3c79b10d5838563b919bd52ebd2efe27b",
+          "result_sha256": "e27a09ad7842e3d9976b0c2aa15d52b3c79b10d5838563b919bd52ebd2efe27b",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 2,
+          "language": "text",
+          "source_sha256": "6f2586e3a028a3d17bbec31427e1575766e57a8c59d9b8353230de69ac520ecd",
+          "result_sha256": "6f2586e3a028a3d17bbec31427e1575766e57a8c59d9b8353230de69ac520ecd",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 3,
+          "language": "text",
+          "source_sha256": "86f5deb932bbdb36bde06a7fc6797d5705dbf180d1b8bb6319a10a484814b21a",
+          "result_sha256": "86f5deb932bbdb36bde06a7fc6797d5705dbf180d1b8bb6319a10a484814b21a",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 4,
+          "language": "text",
+          "source_sha256": "f7c5855cf6f72dcbba50d9fdf43db391431c68aeba783bc0974524bbdbf2acb4",
+          "result_sha256": "f7c5855cf6f72dcbba50d9fdf43db391431c68aeba783bc0974524bbdbf2acb4",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 5,
+          "language": "text",
+          "source_sha256": "b655a2ab70bab1e91c048afa384abc07f735c9438a4a4761f935252abe5a4cb1",
+          "result_sha256": "b655a2ab70bab1e91c048afa384abc07f735c9438a4a4761f935252abe5a4cb1",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 6,
+          "language": "text",
+          "source_sha256": "6c5d9f838eef3875585875baf77a3e380ba3ea4d5ef091866c1200c284faf9bd",
+          "result_sha256": "6c5d9f838eef3875585875baf77a3e380ba3ea4d5ef091866c1200c284faf9bd",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 7,
+          "language": "text",
+          "source_sha256": "906920dc1623372b2b5cab2db4e297a9ef31ec2f5fd4a6cb1a63b1603cead33a",
+          "result_sha256": "906920dc1623372b2b5cab2db4e297a9ef31ec2f5fd4a6cb1a63b1603cead33a",
+          "status": "verbatim"
+        }
+      ]
+    },
+    {
+      "name": "performance",
+      "title": "性能实现与示例",
+      "path": "references/details/performance.md",
+      "start_line": 1851,
+      "end_line": 2012,
+      "prefix": "> **完整规格，不是摘要。** 保留对应原章节、布局、代码和验收；仅登记的技术错误被校订。\n> [章节/保全清单](../PRESERVATION.md)；[当前CLI与schema](../validation.md)。历史实测数字是原文案例，非本次重测。\n\n",
+      "corrections": [
+        {
+          "start_line": 1878,
+          "end_line": 1878,
+          "before": "words = array.array(\"I\")\n",
+          "after": "words = array.array(\"I\")\nif words.itemsize != 4:\n    raise ValueError(\"HOST_UINT_WIDTH_UNSUPPORTED\")\n",
+          "reason": "保留原性能代码，补平台整数宽度。"
+        },
+        {
+          "start_line": 1917,
+          "end_line": 1917,
+          "before": "同理，锚点匹配先用 `set` 交集定位候选偏移，再在候选处做掩码比对，而不是全流滑窗。\n",
+          "after": "掩码锚点仅可对同样按mask归一化的键做集合粗筛，不能用未掩码值交集漏掉合法变体；候选仍完整验证。\n",
+          "reason": "修正masked anchor候选筛选。"
+        },
+        {
+          "start_line": 1924,
+          "end_line": 1924,
+          "before": "- JSONL 用 `\"\\n\".join(...)` 批量拼接后一次写，而不是逐行 `write`。\n",
+          "after": "- JSONL按有界批次用 \"\\n\".join(...) 缓冲写；不逐记录open/flush，也不全库拼接巨型字符串。\n",
+          "reason": "保留批写优化并约束内存。"
+        },
+        {
+          "start_line": 1944,
+          "end_line": 1945,
+          "before": "反汇编各源之间无依赖，天然可并行。**用 `ProcessPoolExecutor` 而非线程**——解析是纯 CPU 计算，\n受 GIL 限制，多线程不会变快：\n",
+          "after": "纯Python CPU密集路径优先实测ProcessPoolExecutor；释放GIL的库或I/O阶段可比较线程，\n并行收益受启动、传输、内存与样本规模影响。进程池示例：\n",
+          "reason": "保留并行方案，修正所有解析必为同一种瓶颈。"
+        },
+        {
+          "start_line": 1948,
+          "end_line": 1950,
+          "before": "with ProcessPoolExecutor() as pool:\n    for src_id, partial in pool.map(disasm_one, sources, chunksize=8):\n        merge_into_library(src_id, partial)      # 主进程串行合库\n",
+          "after": "def main():\n    with ProcessPoolExecutor() as pool:\n        for src_id, partial in pool.map(disasm_one, sources, chunksize=8):\n            merge_into_library(src_id, partial)  # 主进程串行合库\n\nif __name__ == \"__main__\":\n    main()                                      # Windows spawn入口\n",
+          "reason": "保留原进程池代码，补Windows安全入口。"
+        }
+      ],
+      "result_sha256": "02b8c6400bbd9bd7b3944fd2cba9de28539da34d3785ff3161b3fdde3dadfe49",
+      "blocks": [
+        {
+          "ordinal": 1,
+          "language": "python",
+          "source_sha256": "6b25c6a6a7983e0bfe6d60cb7980fa233a2a12f73af759eaab543a2299e746e4",
+          "result_sha256": "001901e0028a2267c6388fb0ab86776530e7e7f81e55d0e45b654694abfd4c9a",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 2,
+          "language": "python",
+          "source_sha256": "2e80c7a53cb32b06669c53ab280cbe32c1af0d9417375805aaa0f8292619b0bb",
+          "result_sha256": "2e80c7a53cb32b06669c53ab280cbe32c1af0d9417375805aaa0f8292619b0bb",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 3,
+          "language": "python",
+          "source_sha256": "9fc37f6b2e624c3c4391d48b11174dc3d48baad3c064d3283d8916ca96441bdd",
+          "result_sha256": "6bc9da80816f2055e84d639222a03c729a1ea1e1eff47db61c3375b49e012c08",
+          "status": "corrected"
+        },
+        {
+          "ordinal": 4,
+          "language": "python",
+          "source_sha256": "d74f119548cefcca2065b146c6ac09e45263f16306c66f4d78276352937da9f4",
+          "result_sha256": "d74f119548cefcca2065b146c6ac09e45263f16306c66f4d78276352937da9f4",
+          "status": "verbatim"
+        },
+        {
+          "ordinal": 5,
+          "language": "text",
+          "source_sha256": "d35a8934f536eb4759edb7d85bb3f3b07616d46f7153fcf6eacaebfb2ca06861",
+          "result_sha256": "d35a8934f536eb4759edb7d85bb3f3b07616d46f7153fcf6eacaebfb2ca06861",
+          "status": "verbatim"
+        }
+      ]
+    }
+  ]
+}

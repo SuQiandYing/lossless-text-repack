@@ -1,56 +1,73 @@
 # lossless-text-repack
 
-给 AI 编程助手用的技能包。做游戏脚本翻译：把文本提出来翻译，改完装回去。
+做游戏脚本翻译：把文本提出来，翻译后再装回去。
+这里是制作工具时用的规范和检查脚本；新游戏的文件格式仍需单独适配。
 
 ## 安装
 
-放到客户端的技能目录，重启即可。
+把整个 `lossless-text-repack` 文件夹放到技能目录，重新加载客户端即可。
 
 | 客户端 | 目录 |
 |---|---|
-| Claude Code / 桌面版 | `~/.claude/skills/` |
-| Codex CLI | `~/.codex/skills/` |
-| 其他 | `~/<配置目录>/skills/` |
+| Codex | `~/.codex/skills/` |
+| Claude Code | `~/.claude/skills/` |
+| 其他 | 按客户端的技能目录配置 |
+
+macOS / Linux，以 Codex 为例：
 
 ```bash
-git clone https://github.com/<你的用户名>/lossless-text-repack.git
-mkdir -p ~/.claude/skills
-cp -r lossless-text-repack ~/.claude/skills/
+mkdir -p ~/.codex/skills
+cp -R lossless-text-repack ~/.codex/skills/
 ```
 
 Windows PowerShell：
 
 ```powershell
-New-Item -ItemType Directory -Force "$HOME\.claude\skills"
-Copy-Item -Recurse lossless-text-repack "$HOME\.claude\skills\"
+New-Item -ItemType Directory -Force "$HOME\.codex\skills" | Out-Null
+Copy-Item -LiteralPath ".\lossless-text-repack" -Destination "$HOME\.codex\skills\" -Recurse
 ```
 
-`SKILL.md` 要在 `lossless-text-repack/` 第一层，别多套一层文件夹（解压 ZIP 常出这问题）。装完重启客户端，不重启看不到。
-
-装多个客户端就各复制一份。
+已有同名目录先备份。确认 `SKILL.md` 在 `lossless-text-repack/` 第一层，不要多套一层文件夹。
+使用前先读完 `SKILL.md`、14 份完整章节、5 份补充文档和保全清单，共 21 份规范文档；读完再计划。
 
 ## 检查脚本
 
-`scripts/` 下 7 个脚本能单独用，接到自己项目的 CI 里。只读文件、输出 JSON、退出码 0/1，需要 Python 3.11+，只用标准库。
+需要 Python 3.11+，只用标准库。七个检查脚本可单独运行，`run_gates.py` 用来汇总本次要跑的检查。
 
 ```bash
-python scripts/check_output_sanity.py reports/extract_report.json    # 抽出来的合不合理
-python scripts/check_shapes.py reports/shapes.json --corpus-wide     # 结构变体查全了没
-python scripts/check_determinism.py edit SAMPLE rebuilt/SAMPLE --edited   # 改了哈希必须变
-python scripts/check_sites.py orig.bin rebuilt.bin ir/join_sites.jsonl    # 引用是否按位置改
-python scripts/check_dsat.py ir/ texts/                              # 译文文件有没有被改坏
-python scripts/coverage_certificate.py SAMPLE reports/cert.json      # 字节有没有缺口重叠
-python scripts/check_no_literals.py src/ --exclude opcodelist        # 引擎魔数有没有混进通用代码
+python scripts/check_output_sanity.py reports/extract.json            # 提取数量和类别
+python scripts/check_shapes.py reports/shapes.json                    # 已观测的结构形态
+python scripts/check_determinism.py edit source.bin rebuilt.bin --no-edit  # 零编辑逐字节一致
+python scripts/check_sites.py source.bin rebuilt.bin validation/join_sites.jsonl  # 等长改写站点
+python scripts/check_dsat.py validation/ir texts/                     # 双行文本导入
+python scripts/coverage_certificate.py source.bin reports/cert.json  # 字节区间覆盖
+python scripts/check_no_literals.py implementation/ --exclude opcodelist  # 方言常量是否混入通用代码
+python scripts/run_gates.py validation/gates.json                     # 按计划汇总
+```
+
+结果是 JSON；退出码 `0` 为通过，`1` 为失败，`2` 为证据不足、未验证。
+这些命令只检查各自收到的证据，不会替你解析游戏文件。
+完整输入格式、目标编码绑定、变长布局映射和聚合计划见 [验证协议](references/validation.md)。
+改动脚本后运行：
+
+```bash
+python -B -m unittest discover -s tests -v
 ```
 
 ## 文件
 
-```
-SKILL.md     规范正文，§0-§12 全在一个文件里
-scripts/     7 个检查脚本
+```text
+SKILL.md              入口和使用规则
+references/details/   原规范的 14 个完整章节，含 GUI 布局与代码示例
+references/*.md       5 份实施补充及内容保全清单
+scripts/              7 个检查脚本和 run_gates.py
+tests/                回归测试与原文对照
+agents/               客户端显示信息
 ```
 
-完整规范见 [SKILL.md](SKILL.md)。
+完整工具仍按规范交付 `opcodelist.py`、`disassembler.py`、`assembler.py`、
+`run_gui.py`、`vm_analysis.md` 和使用说明；GUI 是两按钮界面。
+章节去向及逐项修订见 [内容保全清单](references/PRESERVATION.md)。
 
 ## 许可
 

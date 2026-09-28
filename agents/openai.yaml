@@ -1,0 +1,4 @@
+interface:
+  display_name: "无损文本回封"
+  short_description: "游戏脚本与归档文本提取、变长回封及字节保真验证，按实际证据声明能力"
+  default_prompt: "用 $lossless-text-repack 处理给定样本：开始计划前先完整通读本 skill 的全部21份规范文档，再完成我请求的分析、提取或回封阶段，保留原件，按证据声明能力并报告适用检查的真实结果。"

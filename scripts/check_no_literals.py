@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Assert that structural-logic modules contain no engine-specific literals.
+"""Heuristically flag possible dialect literals in structural-logic modules.
 
-Enforces SKILL.md §7: opcode values, callee IDs, field offsets, window constants
-and text-classification regexes belong in the declarative dialect, not in the
-code that consumes it. When they leak into code, dialect values stop being
-traceable to evidence, classification rules cannot be counted or tested in
-isolation, and porting to another game means copying the whole module.
+See references/parsing-evidence.md: review whether opcode values, callee IDs,
+field offsets, window constants and text-classification regexes represent engine
+parameters. Confirmed engine parameters benefit from traceable dialect records;
+generic parsing logic and reviewed format-independent constants may stay in code.
 
 Uses AST analysis, not text matching, so comments and docstrings are exempt and
 `0x` inside strings is not confused with a numeric literal.
 
-Exit code 0 = clean, 1 = violations found. Never mutates any input.
+This is a review aid, not proof that a constant is engine-specific or that all
+such constants were found. Decimal values and arbitrary naming are ambiguous.
+Tests, dialect data and this checker are outside its default scope.
+Exit: pass=0, fail=1, not_verified=2. Never mutates any input.
 """
 
 from __future__ import annotations
@@ -18,8 +20,10 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import io
 import re
 import sys
+import tokenize
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -33,13 +37,13 @@ ALLOWED_INTS = set(range(-2, 65)) | {
 # Hex spelling gets a much tighter allowlist than the decimal one above. Opcodes,
 # sub-opcodes and callee IDs are usually small (0x10, 0x2A), so exempting
 # everything under 65 would let the most common engine constants through -- the
-# exact class §7 names first. Writing a value in hex is a deliberate signal that
-# it is a machine-level constant, so only generic masks are exempt.
-HEX_GENERIC = {0x7F, 0xFF, 0xFFFF, 0xFFFFFF, 0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF}  # dialect-literal-ok: 门禁自身的通用掩码白名单
+# possible engine-parameter category. Hex is only a review signal, not proof of
+# engine-specific meaning; generic widths and masks are exempt.
+HEX_GENERIC = {0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024,
+               127, 255, 65535, 16777215, 4294967295, 18446744073709551615}  # dialect-literal-ok: generic widths and masks
 
-# Byte strings of three or more bytes in structural logic are almost always
-# container signatures (b"PSB\x00", b"RIFF"). Genuinely generic constants are
-# listed here; anything else needs `dialect-literal-ok` with a reason.
+# Byte strings of three or more bytes may be container signatures. Known generic
+# constants are listed here; reviewed exceptions use a reasoned inline waiver.
 GENERIC_BYTES = {b"\xef\xbb\xbf"}  # UTF-8 BOM
 
 # Regex features that indicate text-shape classification rather than parsing.
@@ -68,12 +72,12 @@ OWN_FORMAT_HINTS = re.compile(
 #: 纯语法构成的模式（如 (\w+)=(\S+)）是通用解析，报它只会淹没真正的问题。
 LANG_SPECIFIC_PATTERN = re.compile(r"[^\x00-\x7f]")
 
-# §7's hard rule names hex literals, ID tables and regexes. A bare decimal cannot
-# be classified automatically -- 500 may be an undocumented scan window (§1.6)
+# This heuristic highlights hex literals, ID tables and regexes. A bare decimal
+# cannot be classified automatically -- 500 may be an undocumented scan window
 # while 80 is a harmless preview length -- so decimals are advisory only and do
 # not fail the gate.
 HARD_CODES = {"ENGINE_MAGIC", "ENGINE_ID_TABLE", "TEXT_SHAPE_REGEX",
-              "INLINE_REGEX", "SYNTAX_ERROR"}
+              "INLINE_REGEX", "SYNTAX_ERROR", "UNJUSTIFIED_WAIVER"}
 
 
 class Finding:
@@ -95,9 +99,23 @@ class Visitor(ast.NodeVisitor):
     def __init__(self, path: Path, source: str, allow_lines: set[int]) -> None:
         self.path = path
         self.lines = source.splitlines()
+        self.source = source
         self.allow_lines = allow_lines
         self.findings: list[Finding] = []
         self._in_annotation = 0
+        self.regex_modules: set[str] = set()
+        self.regex_functions: set[str] = set()
+
+    def visit_Import(self, node: ast.Import) -> None:
+        for alias in node.names:
+            if alias.name == "re":
+                self.regex_modules.add(alias.asname or "re")
+
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+        if node.module == "re":
+            for alias in node.names:
+                if alias.name in REGEX_CALLS | {"split"}:
+                    self.regex_functions.add(alias.asname or alias.name)
 
     # -- helpers ------------------------------------------------------------
     def _allowed(self, node: ast.AST) -> bool:
@@ -115,7 +133,7 @@ class Visitor(ast.NodeVisitor):
             return
         if isinstance(node.value, int):
             src = self._src(node)
-            # Hex spelling is the strongest signal of an engine constant, so it is
+            # Hex spelling is a review signal for an engine constant, so it is
             # judged against HEX_GENERIC rather than the permissive decimal set.
             is_hex = self._spelled_hex(node, src)
             if is_hex:
@@ -123,19 +141,18 @@ class Visitor(ast.NodeVisitor):
                     self.findings.append(Finding(
                         self.path, node, "ENGINE_MAGIC",
                         f"十六进制字面量 {hex(node.value)} 出现在结构逻辑中；"
-                        f"opcode/子码/调用 ID 应移入 dialect 声明并附 evidence_refs"
-                        f"（§7）｜{src[:70]}"))
+                        f"需审阅是否为引擎参数；见 references/parsing-evidence.md｜{src[:70]}"))
             elif node.value not in ALLOWED_INTS:
                 self.findings.append(Finding(
                     self.path, node, "UNEXPLAINED_INT",
                     f"字面量 {node.value} 出现在结构逻辑中"
-                    f"；应移入 dialect 声明并附 evidence_refs（§7）｜{src[:70]}"))
+                    f"；需审阅是否为引擎参数；见 references/parsing-evidence.md｜{src[:70]}"))
         elif isinstance(node.value, bytes):
             if len(node.value) >= 3 and node.value not in GENERIC_BYTES:
                 self.findings.append(Finding(
                     self.path, node, "ENGINE_MAGIC",
-                    f"字节串字面量 {node.value!r} 出现在结构逻辑中；容器签名应移入 "
-                    f"dialect 的 applies_when/magic 声明（§7）｜{self._src(node)[:70]}"))
+                    f"字节串字面量 {node.value!r} 出现在结构逻辑中；需审阅是否为引擎参数；"
+                    f"见 references/parsing-evidence.md｜{self._src(node)[:70]}"))
         self.generic_visit(node)
 
     def _spelled_hex(self, node: ast.AST, src: str) -> bool:
@@ -149,7 +166,8 @@ class Visitor(ast.NodeVisitor):
         i = getattr(node, "lineno", 0) - 1
         if col is None or end is None or not (0 <= i < len(self.lines)):
             return bool(re.search(r"0[xX][0-9a-fA-F]+", src))
-        return bool(re.match(r"0[xX][0-9a-fA-F]+", self.lines[i][col:end]))
+        # AST columns count UTF-8 bytes, not Python characters.
+        return bool(re.match(r"0[xX][0-9a-fA-F]+", ast.get_source_segment(self.source, node) or ""))
 
     # -- opcode / id containers --------------------------------------------
     def visit_Set(self, node: ast.Set) -> None:
@@ -176,11 +194,10 @@ class Visitor(ast.NodeVisitor):
             self.findings.append(Finding(
                 self.path, node, "ENGINE_ID_TABLE",
                 f"{kind} 中有 {len(ints)} 个整数字面量（{preview}…）"
-                f"；opcode/调用 ID 集合属于 dialect，不属于代码（§7）"))
+                f"；需审阅是否为引擎参数；见 references/parsing-evidence.md"))
 
     # -- regex literals -----------------------------------------------------
-    @staticmethod
-    def _is_regex_call(func: ast.expr) -> bool:
+    def _is_regex_call(self, func: ast.expr) -> bool:
         """只认 re 模块的调用，或从 re 导入的同名函数。
 
         `str.split(":")`、`text.startswith("#")` 这类不是正则；把它们算进来会淹没真正的
@@ -188,11 +205,11 @@ class Visitor(ast.NodeVisitor):
         """
         if isinstance(func, ast.Attribute):
             base = func.value
-            if isinstance(base, ast.Name) and base.id == "re":
+            if isinstance(base, ast.Name) and base.id in self.regex_modules:
                 return func.attr in REGEX_CALLS | {"split"}
             return False                       # obj.match(...) 之类，无法确定是 re
         if isinstance(func, ast.Name):
-            return func.id in REGEX_CALLS
+            return func.id in self.regex_functions
         return False
 
     def visit_Call(self, node: ast.Call) -> None:
@@ -211,13 +228,14 @@ class Visitor(ast.NodeVisitor):
                     self.findings.append(Finding(
                         self.path, arg, code,
                         f"内联正则 {pat[:48]!r}"
-                        + ("（含字符形态判断，属于 text_rules）" if code == "TEXT_SHAPE_REGEX"
-                           else "（应移入 dialect 以便审阅与统计）") + "（§7）"))
+                        + ("（含字符形态判断）" if code == "TEXT_SHAPE_REGEX" else "")
+                        + "；需审阅是否为引擎参数；见 references/parsing-evidence.md"))
         self.generic_visit(node)
 
 
 def scan(path: Path) -> list[Finding]:
-    source = path.read_text(encoding="utf-8")
+    with tokenize.open(path) as handle:
+        source = handle.read()
     try:
         tree = ast.parse(source, filename=str(path))
     except SyntaxError as exc:
@@ -225,13 +243,21 @@ def scan(path: Path) -> list[Finding]:
         f.line = exc.lineno or 0
         return [f]
 
-    allow_lines = {
-        i for i, line in enumerate(source.splitlines(), 1)
-        if "dialect-literal-ok" in line
-    }
+    allow_lines = set()
+    invalid_waivers = []
+    # Only an actual comment can waive a finding, never a string literal.
+    for token in tokenize.generate_tokens(io.StringIO(source).readline):
+        if token.type == tokenize.COMMENT and "dialect-literal-ok" in token.string:
+            marker = token.string.split("dialect-literal-ok", 1)[1]
+            if not marker.startswith(":") or not marker[1:].strip():
+                finding = Finding(path, ast.Module(), "UNJUSTIFIED_WAIVER", "Use # dialect-literal-ok: specific review reason")
+                finding.line = token.start[0]
+                invalid_waivers.append(finding)
+            else:
+                allow_lines.add(token.start[0])
     v = Visitor(path, source, allow_lines)
     v.visit(tree)
-    return v.findings
+    return v.findings + invalid_waivers
 
 
 def main(argv: Iterable[str] | None = None) -> int:
@@ -244,34 +270,46 @@ def main(argv: Iterable[str] | None = None) -> int:
     args = ap.parse_args(list(argv) if argv is not None else None)
 
     # The dialect module is where literals belong; never flag it.
-    excludes = list(args.exclude) + ["opcodelist", "dialect", "test_"]
+    excludes = list(args.exclude)
 
     files: list[Path] = []
     for t in args.targets:
         files.extend(sorted(t.rglob("*.py")) if t.is_dir() else [t])
-    files = [f for f in files if not any(x in f.as_posix() for x in excludes)]
+    out = args.report
+    try:
+        if out and any(out.resolve() == path.resolve() or (out.exists() and path.exists() and out.samefile(path)) for path in files):
+            out = None
+            raise ValueError("report output must not overwrite scanned or excluded source files")
+    except (OSError, ValueError) as exc:
+        _emit({"ok": False, "status": "fail", "errors": [{"code": "REPORT_OUTPUT_ERROR", "detail": str(exc)}]}, None)
+        return 1
+    files = sorted(set(f.resolve() for f in files if f.suffix == ".py"
+                       and f.name not in {"opcodelist.py", "dialect.py", "check_no_literals.py"}
+                       and not f.name.startswith("test_")
+                       and not any(part in {"tests", "test", "dialects", "__pycache__"} for part in f.parts)
+                       and not any(x in f.as_posix() for x in excludes)))
 
     findings: list[Finding] = []
     unreadable: list[dict[str, str]] = []
     for f in files:
         try:
             findings.extend(scan(f))
-        except OSError as exc:
+        except (OSError, UnicodeError, SyntaxError, tokenize.TokenError) as exc:
             unreadable.append({"file": str(f), "error": str(exc)})
 
     # 「没扫到东西」与「扫过且干净」必须区分：路径写错时若返回 ok，门禁形同虚设。
     if not files:
-        _emit({"ok": False, "scanned_files": 0, "violations": 0,
+        result = _emit({"ok": False, "status": "not_verified", "scanned_files": 0, "violations": 0,
                "errors": [{"code": "NO_INPUT",
                            "detail": "没有匹配到任何 .py 文件；请检查路径与 --exclude"}]},
-              args.report)
-        return 1
+              out)
+        return 1 if result["status"] == "fail" else 2
     if unreadable:
-        _emit({"ok": False, "scanned_files": len(files) - len(unreadable),
+        _emit({"ok": False, "status": "fail", "scanned_files": len(files) - len(unreadable),
                "violations": 0, "unreadable": unreadable,
                "errors": [{"code": "UNREADABLE_INPUT",
                            "detail": f"{len(unreadable)} 个文件无法读取，结果不可信"}]},
-              args.report)
+              out)
         return 1
 
     by_code: dict[str, int] = {}
@@ -283,29 +321,35 @@ def main(argv: Iterable[str] | None = None) -> int:
 
     result = {
         "ok": not hard,
+        "status": "fail" if hard else "pass",
+        "scope": "heuristic_dialect_literal_scan",
+        "errors": [],
         "scanned_files": len(files),
         "violations": len(hard),
         "advisory": len(advisory),
         "by_code": by_code,
         "findings": [f.as_dict() for f in hard[:200]],
         "advisory_findings": [f.as_dict() for f in advisory[:50]],
-        "note": ("violations 会导致门禁失败；advisory 是十进制字面量，需人工判断是否为"
-                 "未申报的窗口常量（§1.6）。单行豁免：在该行加注释 dialect-literal-ok"),
+        "note": ("Heuristic findings require review, not automatic relocation into a dialect. "
+                 "Pass is not proof of architectural separation. Tests/dialect data/the checker are excluded. "
+                 "A reviewed generic literal may use # dialect-literal-ok: specific reason."),
     }
-    text = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
-    if args.report:
-        args.report.write_text(text, encoding="utf-8")
-    write_stdout(text)
+    result = _emit(result, out)
     return 0 if result["ok"] else 1
 
 
 
-def _emit(result: dict, report) -> None:
+def _emit(result: dict, report) -> dict:
     text = json.dumps(result, ensure_ascii=False, indent=2,
                       sort_keys=True) + chr(10)
     if report:
-        report.write_text(text, encoding="utf-8")
+        try:
+            report.write_text(text, encoding="utf-8")
+        except OSError as exc:
+            result = {"ok": False, "status": "fail", "errors": [{"code": "REPORT_OUTPUT_ERROR", "detail": str(exc)}]}
+            text = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     write_stdout(text)
+    return result
 
 def write_stdout(text: str) -> None:
     """Write UTF-8 regardless of the console code page.

@@ -1,226 +1,245 @@
 #!/usr/bin/env python3
-"""Detect extractions that pass every byte-level gate yet found nothing useful.
+"""Check extraction-report plausibility, not completeness.
 
-Enforces SKILL.md §0.1. A tool can reach byte_coverage=1.0, byte-identical
-roundtrip, a strict certificate and a green test suite while extracting zero
-dialogue -- because those gates measure byte ownership and reversibility, not
-whether the target objects were located. This script checks the extraction
-*output* instead.
-
-Input is the per-sample extraction report (JSON or JSONL). Required per sample:
-
-    {"sample": "a.scn", "byte_size": 120329,
-     "tags": {"msg": 161, "name": 44, "ui": 4},
-     "containers": {"strings": 257, "dialog_entries": 96}}   # optional
-
-`containers` enables the order-of-magnitude check; without it that check is
-skipped and reported as such rather than silently passing.
-
-Exit code 0 = plausible, 1 = suspicious (requires human confirmation).
-Never mutates any input.
+Accept a sample, nonempty array, JSONL, or {rows|samples|files: [...]}.
+Counts are nonnegative integers. Required tags are domain-specific opt-ins;
+skew/density warnings are advisory. Exit: pass=0, fail=1, not_verified=2.
 """
-
 from __future__ import annotations
-
 import argparse
 import json
 import sys
 from pathlib import Path
 from typing import Any, Iterable
 
-#: 剧本类样本必须命中的类别。缺失即判定为失败：含对话的作品不可能提取到 0 条正文。
-#: 这不是启发式推测，而是领域确定性事实（§0.1）。
-REQUIRED_TAGS = {"msg"}
-
-#: 单一类别占比超过此值即视为倾斜——通常意味着只命中了某一种结构分支。
+REQUIRED_TAGS: set[str] = set()
 SKEW_THRESHOLD = 0.95
-
-#: 抽出条数与容器内同类对象数之比低于此值即视为数量级不符。
 MAGNITUDE_RATIO = 0.10
-
-#: 每千字节产出量的跨样本离散度上限（最大值 / 最小值）。
 DENSITY_SPREAD = 10.0
-
-#: 容器对象名 -> 应与之数量级相当的 tag。
 CONTAINER_EXPECT = {"dialog_entries": "msg", "select_entries": "choice"}
+TAG_FIELDS = ("tags", "tag_counts", "export_tag_counts", "by_tag")
 
 
-def load_report(path: Path) -> list[dict[str, Any]]:
-    """读取报告。接受 JSON 数组、JSONL，或含 rows/samples 键的对象。"""
-    text = path.read_text(encoding="utf-8-sig")
-    stripped = text.lstrip()
-    if stripped.startswith("["):
-        rows = json.loads(text)
-    elif stripped.startswith("{"):
-        obj = json.loads(text)
-        for key in ("rows", "samples", "files"):
-            if isinstance(obj.get(key), list):
-                rows = obj[key]
-                break
-        else:
-            rows = [obj]
-    else:
-        rows = [json.loads(line) for line in text.splitlines() if line.strip()]
-    if not isinstance(rows, list):
-        raise ValueError("报告根节点必须是数组、JSONL 或含 rows/samples 的对象")
-    return [r for r in rows if isinstance(r, dict)]
+def unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON key: {key}")
+        result[key] = value
+    return result
 
 
-def tag_counts(row: dict[str, Any]) -> dict[str, int]:
-    """取出该样本的 tag 计数，兼容几种常见字段名。"""
-    for key in ("tags", "tag_counts", "export_tag_counts", "by_tag"):
-        value = row.get(key)
-        if isinstance(value, dict):
-            return {str(k): int(v) for k, v in value.items()
-                    if isinstance(v, (int, float))}
-    return {}
+def parse_json(text: str) -> Any:
+    def invalid(value: str) -> None:
+        raise ValueError(f"non-finite JSON number: {value}")
+    return json.loads(text, object_pairs_hook=unique_object, parse_constant=invalid)
+
+
+def names(value: Any, label: str) -> list[str]:
+    if not isinstance(value, list) or any(not isinstance(x, str) or not x.strip() for x in value):
+        raise ValueError(f"{label} must be an array of nonempty strings")
+    if len(set(value)) != len(value):
+        raise ValueError(f"{label} contains duplicates")
+    return value
+
+
+def counts(value: Any, label: str) -> dict[str, int]:
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} must be an object")
+    for key, amount in value.items():
+        if not isinstance(key, str) or not key.strip() or type(amount) is not int or amount < 0:
+            raise ValueError(f"{label}.{key} must be a nonnegative integer")
+    return value
+
+
+def audited_reason(value: Any, label: str) -> None:
+    if not isinstance(value, dict) or not isinstance(value.get("reason"), str) or not value["reason"].strip():
+        raise ValueError(f"{label} requires a nonempty reason")
+    if not names(value.get("evidence_refs"), f"{label}.evidence_refs"):
+        raise ValueError(f"{label} requires evidence_refs")
 
 
 def sample_name(row: dict[str, Any], index: int) -> str:
     for key in ("sample", "file", "name", "path"):
-                                            # path 取尾段，避免报告里出现绝对路径
         value = row.get(key)
-        if isinstance(value, str) and value:
-            return Path(value).name
-    return f"#{index}"
+        if isinstance(value, str) and value.strip():
+            return value  # Full identity: equal basenames need not be equal samples.
+    raise ValueError(f"sample[{index}] requires sample/file/name/path identity")
+
+
+def tag_counts(row: dict[str, Any]) -> dict[str, int]:
+    fields = [key for key in TAG_FIELDS if key in row]
+    if len(fields) > 1:
+        raise ValueError("ambiguous tag-count aliases")
+    return counts(row[fields[0]], fields[0]) if fields else {}
+
+
+def load_report(path: Path) -> list[dict[str, Any]]:
+    text = path.read_text(encoding="utf-8-sig")
+    if not text.strip():
+        raise ValueError("report is empty")
+    try:
+        obj = parse_json(text)
+    except json.JSONDecodeError:
+        # JSONL starts with '{' too. Do not rescue duplicate keys or NaN here.
+        obj = [parse_json(line) for line in text.splitlines() if line.strip()]
+    metadata: dict[str, Any] = {}
+    if isinstance(obj, dict):
+        wrappers = [key for key in ("rows", "samples", "files") if key in obj]
+        if len(wrappers) > 1:
+            raise ValueError("ambiguous report wrapper")
+        if wrappers:
+            metadata = {key: obj[key] for key in ("domain", "required_tags") if key in obj}
+            obj = obj[wrappers[0]]
+        else:
+            obj = [obj]
+    if not isinstance(obj, list) or not obj:
+        raise ValueError("report requires a nonempty sample array")
+    rows = []
+    identities = set()
+    for index, value in enumerate(obj):
+        if not isinstance(value, dict):
+            raise ValueError(f"sample[{index}] must be an object")
+        row = {**metadata, **value}
+        identity = sample_name(row, index)
+        if identity in identities:
+            raise ValueError(f"duplicate sample identity: {identity}")
+        identities.add(identity)
+        tag_counts(row)
+        for key in ("byte_size", "size"):
+            if key in row and (type(row[key]) is not int or row[key] < 0):
+                raise ValueError(f"{identity}.{key} must be a nonnegative integer")
+        if "containers" in row:
+            counts(row["containers"], "containers")
+        if "domain" in row and (not isinstance(row["domain"], str) or not row["domain"].strip()):
+            raise ValueError(f"{identity}.domain must be a nonempty string")
+        required = names(row.get("required_tags", []), "required_tags")
+        if required and not row.get("domain"):
+            raise ValueError("required_tags requires an explicitly declared domain")
+        if "waivers" in row:
+            if not isinstance(row["waivers"], dict):
+                raise ValueError("waivers must be an object")
+            for tag, waiver in row["waivers"].items():
+                if not tag.strip():
+                    raise ValueError("waiver tag must not be empty")
+                audited_reason(waiver, f"waivers.{tag}")
+        if "allow_empty" in row:
+            audited_reason(row["allow_empty"], "allow_empty")
+        rows.append(row)
+    return rows
 
 
 def check_sample(row: dict[str, Any], index: int,
                  required: set[str] | None = None) -> list[dict[str, Any]]:
-    """单样本检查。返回问题列表，空列表表示通过。"""
     name = sample_name(row, index)
     tags = tag_counts(row)
-    required = REQUIRED_TAGS if required is None else required
+    required = set(required or ()) | set(row.get("required_tags", []))
     issues: list[dict[str, Any]] = []
-
-    if not tags:
-        return [{"sample": name, "code": "NO_TAG_COUNTS",
-                 "detail": "报告中没有 tag 计数字段，无法判断产出是否合理；"
-                           "请在提取报告里输出 tags{}"}]
-
+    if not any(key in row for key in TAG_FIELDS):
+        return [{"sample": name, "code": "NO_TAG_COUNTS", "severity": "not_verified",
+                 "detail": "No tag counts supplied; output plausibility was not checked."}]
     total = sum(tags.values())
-    if total == 0:
-        return [{"sample": name, "code": "EMPTY_OUTPUT",
-                 "detail": "该样本一条文本都没提取到"}]
-
-    # ① 必需类别缺失
+    if total == 0 and not row.get("allow_empty"):
+        issues.append({"sample": name, "code": "EMPTY_OUTPUT", "severity": "fail",
+                       "detail": "No text extracted; allow_empty needs evidence that the sample contains no text."})
     for tag in sorted(required):
         if tags.get(tag, 0) == 0:
-            issues.append({
-                "sample": name, "code": "REQUIRED_TAG_ZERO",
-                "detail": f"tag={tag} 为 0 条，而其余类别共 {total} 条。"
-                          f"含对话的剧本不可能没有正文——通常是结构变体未被穷举"
-                          f"（§0.2），提取逻辑落在了值为 null 的平铺槽位上",
-                "tags": tags})
-
-    # ② 产出高度倾斜
-    top_tag, top_n = max(tags.items(), key=lambda kv: kv[1])
-    share = top_n / total
-    if share > SKEW_THRESHOLD and len(tags) > 1:
-        issues.append({
-            "sample": name, "code": "SKEWED_OUTPUT",
-            "detail": f"tag={top_tag} 占 {share:.1%}（{top_n}/{total}），"
-                      f"其余类别接近 0；通常意味着只命中了一种结构分支",
-            "tags": tags})
-
-    # ③ 与容器内同类对象数量级不符
-    containers = row.get("containers")
-    if isinstance(containers, dict):
-        for obj_key, tag in CONTAINER_EXPECT.items():
-            declared = containers.get(obj_key)
-            if not isinstance(declared, (int, float)) or declared <= 0:
-                continue
-            got = tags.get(tag, 0)
-            if got < declared * MAGNITUDE_RATIO:
-                issues.append({
-                    "sample": name, "code": "MAGNITUDE_MISMATCH",
-                    "detail": f"容器内有 {int(declared)} 个 {obj_key}，"
-                              f"但只抽出 {got} 条 tag={tag}"
-                              f"（低于 {MAGNITUDE_RATIO:.0%} 阈值）",
-                    "tags": tags})
+            issues.append({"sample": name, "code": "REQUIRED_TAG_ZERO", "severity": "fail",
+                           "detail": f"Declared domain requires tag={tag}, but count is zero."})
+    # Omitted and explicit zero fields must produce the same verdict.
+    positive = {key: amount for key, amount in tags.items() if amount > 0}
+    if total and len(positive) > 1:
+        tag, amount = max(positive.items(), key=lambda pair: pair[1])
+        if amount / total > SKEW_THRESHOLD:
+            issues.append({"sample": name, "code": "SKEWED_OUTPUT", "severity": "advisory",
+                           "detail": f"{tag}: {amount}/{total}; review against this sample's declared domain."})
+    for key, tag in CONTAINER_EXPECT.items():
+        declared = row.get("containers", {}).get(key, 0)
+        if declared > 0 and tags.get(tag, 0) < declared * MAGNITUDE_RATIO:
+            issues.append({"sample": name, "code": "MAGNITUDE_MISMATCH", "severity": "fail",
+                           "detail": f"{key}={declared}, but {tag}={tags.get(tag, 0)}."})
     return issues
 
 
 def check_density(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """跨样本密度离散度。同引擎样本的每千字节产出量不应差一个数量级以上。"""
-    points: list[tuple[str, float]] = []
-    for i, row in enumerate(rows):
-        size = row.get("byte_size") or row.get("size")
-        tags = tag_counts(row)
-        if not isinstance(size, (int, float)) or size <= 0 or not tags:
-            continue
-        points.append((sample_name(row, i), sum(tags.values()) / (size / 1000)))
+    points = [(sample_name(row, i), sum(tag_counts(row).values()) / row.get("byte_size", row.get("size", 0)))
+              for i, row in enumerate(rows) if row.get("byte_size", row.get("size", 0)) > 0]
     if len(points) < 2:
         return []
-    lo_name, lo = min(points, key=lambda p: p[1])
-    hi_name, hi = max(points, key=lambda p: p[1])
-    if lo <= 0:
-        return [{"code": "ZERO_DENSITY",
-                 "detail": f"{lo_name} 的每千字节产出量为 0，而 {hi_name} 为 {hi:.2f}"}]
-    if hi / lo > DENSITY_SPREAD:
-        return [{"code": "DENSITY_SPREAD",
-                 "detail": f"每千字节产出量跨样本差 {hi/lo:.0f} 倍"
-                           f"（{lo_name} {lo:.2f} … {hi_name} {hi:.2f}）；"
-                           f"通常意味着部分样本的结构变体未被处理"}]
+    lo_name, lo = min(points, key=lambda pair: pair[1])
+    hi_name, hi = max(points, key=lambda pair: pair[1])
+    if (lo == 0 and hi > 0) or (lo > 0 and hi / lo > DENSITY_SPREAD):
+        return [{"code": "DENSITY_SPREAD", "severity": "advisory",
+                 "detail": f"Density differs: {lo_name}={lo}, {hi_name}={hi}. Domain/content may differ."}]
     return []
 
 
 def main(argv: Iterable[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("report", type=Path, help="提取报告（JSON / JSONL）")
-    ap.add_argument("--require-tag", action="append", default=[],
-                    help="追加必需类别，可重复；默认要求 msg")
-    ap.add_argument("--allow-zero", action="append", default=[],
-                    help="允许该类别为 0（须在报告里写明理由），可重复")
+    ap.add_argument("report", type=Path)
+    ap.add_argument("--require-tag", action="append", default=[])
+    ap.add_argument("--domain", help="Domain to which CLI required tags apply")
+    ap.add_argument("--allow-zero", action="append", default=[], help="Requires per-sample audited waivers")
     ap.add_argument("--report-out", type=Path)
     args = ap.parse_args(list(argv) if argv is not None else None)
-
-    required = (REQUIRED_TAGS | set(args.require_tag)) - set(args.allow_zero)
-
+    out = args.report_out
     try:
+        if out and (out.resolve() == args.report.resolve() or (out.exists() and args.report.exists() and out.samefile(args.report))):
+            out = None
+            raise ValueError("report output must not overwrite the input report")
         rows = load_report(args.report)
-    except (OSError, ValueError, json.JSONDecodeError) as exc:
-        _emit({"ok": False, "issues": [{"code": "REPORT_UNREADABLE",
-                                        "detail": str(exc)}]}, args.report_out)
-        return 1
+        required = set(names(args.require_tag, "--require-tag"))
+        allowed = set(names(args.allow_zero, "--allow-zero"))
+        if args.domain is not None and not args.domain.strip():
+            raise ValueError("--domain must not be empty")
+        if required and not args.domain and not all(row.get("domain") for row in rows):
+            raise ValueError("--require-tag requires --domain or a report domain")
+        issues = []
+        applied_waivers = []
+        for index, row in enumerate(rows):
+            effective = required | set(row.get("required_tags", []))
+            for tag in allowed & effective:
+                audited_reason(row.get("waivers", {}).get(tag), f"{sample_name(row, index)}.waivers.{tag}")
+                applied_waivers.append({"sample": sample_name(row, index), "tag": tag, **row["waivers"][tag]})
+            row = {**row, "required_tags": []}
+            issues.extend(check_sample(row, index, effective - allowed))
+        issues.extend(check_density(rows))
+        failures = [issue for issue in issues if issue["severity"] == "fail"]
+        pending = [issue for issue in issues if issue["severity"] == "not_verified"]
+        status = "fail" if failures else "not_verified" if pending else "pass"
+        result = {"ok": status == "pass", "status": status, "samples": len(rows),
+                  "scope": "report_plausibility_only", "required_tags": sorted(required),
+                  "issues": failures + pending, "issue_count": len(failures) + len(pending),
+                  "advisories": [i for i in issues if i["severity"] == "advisory"],
+                  "waivers_applied": applied_waivers,
+                  "checks_skipped": [{"sample": sample_name(row, i), "check": "magnitude", "status": "not_applicable",
+                                      "reason": "Optional container-count comparison was not declared."}
+                                     for i, row in enumerate(rows) if not row.get("containers")],
+                  "note": "Pass checks recorded counts only, not whether all text was found or correctly classified."}
+    except (OSError, ValueError) as exc:
+        result = {"ok": False, "status": "fail", "issues": [{"code": "INVALID_REPORT", "detail": str(exc)}]}
+    result = _emit(result, out)
+    return {"pass": 0, "fail": 1, "not_verified": 2}[result["status"]]
 
-    issues: list[dict[str, Any]] = []
-    for i, row in enumerate(rows):
-        issues.extend(check_sample(row, i, required))
-    issues.extend(check_density(rows))
 
-    has_containers = any(isinstance(r.get("containers"), dict) for r in rows)
-    result = {
-        "ok": not issues,
-        "samples": len(rows),
-        "required_tags": sorted(required),
-        "checks_skipped": ([] if has_containers
-                           else ["MAGNITUDE_MISMATCH：报告未提供 containers{}"]),
-        "issue_count": len(issues),
-        "issues": issues[:100],
-        "note": "命中任一条即须人工确认，不得以「样本特性」为由放行（§0.1）",
-    }
-    _emit(result, args.report_out)
-    return 0 if result["ok"] else 1
-
-
-def _emit(result: dict[str, Any], out: Path | None) -> None:
+def _emit(result: dict[str, Any], out: Path | None) -> dict[str, Any]:
     text = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     if out:
-        out.write_text(text, encoding="utf-8")
+        try:
+            out.write_text(text, encoding="utf-8")
+        except OSError as exc:
+            result = {"ok": False, "status": "fail", "issues": [{"code": "REPORT_OUTPUT_ERROR", "detail": str(exc)}]}
+            text = json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     write_stdout(text)
+    return result
 
 
 def write_stdout(text: str) -> None:
-    """以 UTF-8 输出，不受控制台代码页限制（GBK/CP932 无法编码 CJK 诊断）。"""
     try:
-        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stdout.reconfigure(encoding="utf-8")
     except (AttributeError, OSError):
         pass
-    try:
-        sys.stdout.write(text)
-    except UnicodeEncodeError:
-        sys.stdout.buffer.write(text.encode("utf-8", "replace"))
+    sys.stdout.write(text)
 
 
 if __name__ == "__main__":
