@@ -1,0 +1,1883 @@
+{
+  "schema": "lossless-text-repack.engine-catalog/1",
+  "policy": {
+    "count_is_inventory": true,
+    "registration_is_not_support": true,
+    "default_capabilities": {
+      "detect": "not_verified",
+      "extract": "catalog-only",
+      "repack": "not_verified",
+      "runtime": "not_verified"
+    },
+    "upgrade_requires": [
+      "local adapter and dialect",
+      "synthetic positive and negative tests",
+      "zero-edit parse/write evidence",
+      "changed-length reparse evidence",
+      "runtime evidence for runtime=verified"
+    ]
+  },
+  "count": 95,
+  "engines": [
+    {
+      "id": "advsys3",
+      "title": "AdvSys3 / arc*.dat",
+      "aliases": [
+        "advsys3"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "agsi",
+      "title": "AGSI / SB2",
+      "aliases": [
+        "agsi"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "ail",
+      "title": "Ail / SNL",
+      "aliases": [
+        "ail"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "anim",
+      "title": "ANIM：滚动密钥 DAT / SCE 局部参考",
+      "aliases": [
+        "anim"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "arcgameengine",
+      "title": "ArcGameEngine：AGE 字符串池算法",
+      "aliases": [
+        "ArcGameEngine",
+        "AGE"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "arcx",
+      "title": "ARCX 工具目录 / SCX.ARC 顺序记录",
+      "aliases": [
+        "arcx"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "artemis-ast",
+      "title": "Artemis Engine：AST 文本剧本（`.ast`）",
+      "aliases": [
+        "Artemis AST",
+        "Artemis astver",
+        "AST text",
+        "PFS AST"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "artemis-scp",
+      "title": "Artemis Engine：SCP 文本剧本（`.txt` / `.iet`）与 pf8 多分卷",
+      "aliases": [
+        "Artemis SCP",
+        "Artemis TXT",
+        "SCP text"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "artemis",
+      "title": "Artemis：ASB 项目树的保真读写",
+      "aliases": [
+        "Artemis",
+        "Mikage"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "ast",
+      "title": "AST / ARC1、ARC2",
+      "aliases": [
+        "ast"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "azsystem",
+      "title": "AZSystem：ASB 包装与解密后命令",
+      "aliases": [
+        "azsystem"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "bgi",
+      "title": "BGI / Ethornell：有界索引、DSC 编解码与标准 V1 往返",
+      "aliases": [
+        "BGI",
+        "Ethornell",
+        "Buriko"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "blackrainbow",
+      "title": "BlackRainbow：分段脚本与文本 XOR",
+      "aliases": [
+        "blackrainbow"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "bluegale",
+      "title": "BlueGale：BDT 与 indexwww.dat 联动",
+      "aliases": [
+        "BlueGale",
+        "BlueGale_bdt"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "catsystem2",
+      "title": "CatSystem2：KIF/INT、CST 对话与安全提取",
+      "aliases": [
+        "CatSystem",
+        "CatSystem2",
+        "CST",
+        "CSTL"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "circus",
+      "title": "Circus：按游戏配置解释 MES token",
+      "aliases": [
+        "circus"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "cscript",
+      "title": "CScript：已解压剧本中的有界记录",
+      "aliases": [
+        "cscript"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "cyberworks",
+      "title": "Cyberworks：a0 的 S/T 长度块",
+      "aliases": [
+        "Cyberworks",
+        "C,system"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "digitalworks",
+      "title": "DigitalWorks / BunBun TAK",
+      "aliases": [
+        "digitalworks"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "eagls",
+      "title": "EAGLS / ALIS：SCPACK、文本尾加密与标签修复",
+      "aliases": [
+        "eagls"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "emonengine",
+      "title": "EmonEngine / EME",
+      "aliases": [
+        "emonengine"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "entis-gls",
+      "title": "Entis GLS：SRCXML 多语言消息与选择属性",
+      "aliases": [
+        "EntisGLS",
+        "Entis GLS",
+        "CSX",
+        "SRCXML"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "escude",
+      "title": "Escu:de：ESC-ARC2、分离消息文件与 ESCR1_00",
+      "aliases": [
+        "Escu:de",
+        "Escude"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "exhibit",
+      "title": "ExHibit：RLD 操作片段、间接姓名与有界 XOR",
+      "aliases": [
+        "ExHibit",
+        "RLD"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "favorite",
+      "title": "Favorite：HCB u8 字符串长度与绝对地址更新",
+      "aliases": [
+        "Favorite",
+        "FVP",
+        "HCB"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "flyingshine",
+      "title": "FlyingShine / PD2",
+      "aliases": [
+        "flyingshine"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "frontwing",
+      "title": "FrontWing / FRONTWING_ADV CSB",
+      "aliases": [
+        "frontwing"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "gsd",
+      "title": "GSD：先 decode 的 v2 族 SPT 与 global.dat",
+      "aliases": [
+        "gsd"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "gxengine",
+      "title": "GxEngine：V3 MWB 字符串与 zlib 包装",
+      "aliases": [
+        "GxEngine",
+        "GxEngine_mwb"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "hcsystem",
+      "title": "HCSystem / PACK",
+      "aliases": [
+        "hcsystem"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "hexenhaus",
+      "title": "Hexenhaus：NORI 的 XOR53 固定槽",
+      "aliases": [
+        "hexenhaus"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "hotsoup",
+      "title": "HotSoup / HSP DPMX",
+      "aliases": [
+        "hotsoup"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "ice",
+      "title": "ICE / 索引字表文本流",
+      "aliases": [
+        "ice"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "ikura",
+      "title": "IKURA / MPX、ISF",
+      "aliases": [
+        "ikura"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "ivory",
+      "title": "Ivory / fAGS OCB",
+      "aliases": [
+        "ivory"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "kaguya",
+      "title": "Kaguya：message.dat ver4.0 与 LINK6 容器往返",
+      "aliases": [
+        "KaGuYa",
+        "Kaguya",
+        "TBLSTR",
+        "SCR-MESSAGE"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "kirikiri",
+      "title": "Kirikiri / KAG：有限 KS 文本往返",
+      "aliases": [
+        "KiriKiri",
+        "KAG",
+        "吉里吉里",
+        "TJS2"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "leaf",
+      "title": "Leaf / KCAP、SDT",
+      "aliases": [
+        "leaf"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "livemaker",
+      "title": "Livemaker：外部导出的 Original text CSV 方言",
+      "aliases": [
+        "LiveMaker",
+        "CSV_Livemaker"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "majiro",
+      "title": "Majiro：MJO 异或与文本 / Ruby 指令片段",
+      "aliases": [
+        "majiro"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "malie",
+      "title": "Malie / 2008 UTF16 与 data5 EXEC",
+      "aliases": [
+        "malie"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "masys",
+      "title": "Masys / MEG 表达式字符串",
+      "aliases": [
+        "masys"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "med",
+      "title": "MED：头部定位的 NUL 文本表",
+      "aliases": [
+        "med"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "melonpan",
+      "title": "Melonpan / WCW TTD",
+      "aliases": [
+        "melonpan"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "mirai",
+      "title": "Mirai / ACV1 script.dat",
+      "aliases": [
+        "mirai"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "mnoviolet",
+      "title": "M no Violet / DAT、CScript",
+      "aliases": [
+        "mnoviolet"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "moonhir",
+      "title": "MoonHir：FPK → FBX → 第一文本区块",
+      "aliases": [
+        "moonhir"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "musica",
+      "title": "Musica：SC 消息、选择与文本转义",
+      "aliases": [
+        "musica"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "mware",
+      "title": "Mware：Squirrel literal 与引用级克隆",
+      "aliases": [
+        "mware"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "nejii",
+      "title": "NEJII / CDT、144字节BIN",
+      "aliases": [
+        "nejii"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "nekosdk",
+      "title": "NekoSDK：ADVSCRIPT2 显示与日志记录",
+      "aliases": [
+        "nekosdk"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "nexas",
+      "title": "NeXAS：PAC 尾索引、BIN 字符串池与 Aikiss3 往返",
+      "aliases": [
+        "NeXAS",
+        "GIGA",
+        "Nexas_asm"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "noncolor",
+      "title": "NonColor / legacy ACV",
+      "aliases": [
+        "noncolor"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "nscripter",
+      "title": "NScripter：容器可回写，文本仍须词法与命令边界审核",
+      "aliases": [
+        "NScripter",
+        "ONScripter",
+        "SAR",
+        "NSA"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "nsystem",
+      "title": "NSystem：BIN 预设的地址表和独立消息记录",
+      "aliases": [
+        "nsystem"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "overflow",
+      "title": "Overflow：TextRes / Log XML 方言",
+      "aliases": [
+        "overflow"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "patisserie",
+      "title": "Patisserie：OZ / OFST 归档",
+      "aliases": [
+        "patisserie"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "propeller",
+      "title": "Propeller：MSC 长度文本与样式 toggle",
+      "aliases": [
+        "propeller"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "puremail",
+      "title": "PureMail：OBJ V1 / V2 索引文本池",
+      "aliases": [
+        "puremail"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "qlie",
+      "title": "QLIE：PACK 3.0 解包、ImoScripter 对白与模板重封包",
+      "aliases": [
+        "qlie"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "ransel",
+      "title": "Ransel：BCD / BCL 配对归档",
+      "aliases": [
+        "ransel"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "reallive",
+      "title": "RealLive：文本 token 与换行指令片段",
+      "aliases": [
+        "reallive"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "renpy",
+      "title": "Ren'Py：有限 .rpy 词法与原位字符串回填",
+      "aliases": [
+        "Ren'Py",
+        "RenPy",
+        "RPA",
+        "RPY"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "rpgmaker",
+      "title": "RPG Maker：MV JSON 与 VX Marshal 转换中间态",
+      "aliases": [
+        "RPG Maker",
+        "RPGMV",
+        "RPGVX",
+        "RPG VX Ace"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "sakanagl",
+      "title": "SakanaGL：SX 密码与已解码索引",
+      "aliases": [
+        "sakanagl"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "sceneplayer",
+      "title": "ScenePlayer：PMX 剧本归档",
+      "aliases": [
+        "sceneplayer"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "scrplayer",
+      "title": "ScrPlayer：XOR 字符串表与命令指针",
+      "aliases": [
+        "scrplayer"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "sfa",
+      "title": "SFA：FGA Huffman 成员与 AOS 文本线索",
+      "aliases": [
+        "sfa"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "shsystem",
+      "title": "ShSystem：只导出特定 scriptcall 0x33",
+      "aliases": [
+        "SHSystem",
+        "ShSystem"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "siglus",
+      "title": "Siglus：Scene.pck 解包不等于 `.ss` 文本往返",
+      "aliases": [
+        "Siglus",
+        "SiglusEngine",
+        "Scene.pck"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "silky",
+      "title": "Silky / Silkys：MAP 全索引与 UTF-16 指针修复",
+      "aliases": [
+        "Silky's",
+        "Silky's Plus",
+        "AI6WIN",
+        "Silky_map"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "slgsystem",
+      "title": "SLGSystem：SZS100__ 容器与两种密码模式",
+      "aliases": [
+        "slgsystem"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "softpal",
+      "title": "Softpal：PAC 解包与 Sv20 / TEXT.DAT / POINT.DAT",
+      "aliases": [
+        "softpal"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "studiomiris",
+      "title": "StudioMiris：SKMSd 消息资源表",
+      "aliases": [
+        "studiomiris"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "studiopolaris",
+      "title": "StudioPolaris：已解密 SCD_ 字节码",
+      "aliases": [
+        "studiopolaris"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "succubus",
+      "title": "Succubus：RIFF / VFA1 事件式归档",
+      "aliases": [
+        "succubus"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "system-epsilon",
+      "title": "SYSTEM-ε：BIN 文本段与候选跳转模式",
+      "aliases": [
+        "SYSTEM-ε",
+        "System Epsilon"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "systemc",
+      "title": "SystemC / SystemB3：ZLC2 literal 成员",
+      "aliases": [
+        "systemc"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "systemnnn",
+      "title": "SystemNNN：开发版定长槽与发布版 word 地址",
+      "aliases": [
+        "SystemNNN",
+        "NNN",
+        "SPT"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "tanaka",
+      "title": "Tanaka：SCB1 模板重封与 BIN 文本记录",
+      "aliases": [
+        "tanaka"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "tmrhiro",
+      "title": "TmrHiro：text 流的 i16 长度往返",
+      "aliases": [
+        "tmrhiro"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "triangle",
+      "title": "Triangle：MOP / EXD / KLH 的独立文本块",
+      "aliases": [
+        "triangle"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "ugos",
+      "title": "U-GOS：.o 指针引用的字符串块",
+      "aliases": [
+        "ugos"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "umesoft",
+      "title": "U-MeSoft：PK 尾索引与 SCR/TBL literal 封装",
+      "aliases": [
+        "umesoft"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "unison",
+      "title": "Unison / Softpal Lazy：VAL 分离式字符串池",
+      "aliases": [
+        "unison"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "unity",
+      "title": "Unity：仅 UTAGE mono DAT 的对齐字符串",
+      "aliases": [
+        "UTAGE",
+        "Unity UTAGE mono DAT"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "violent",
+      "title": "Violent BIN 规则：只读 JIS 候选证据",
+      "aliases": [
+        "violent"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "whale",
+      "title": "Whale：文本行结构、SELECT 与 [n]",
+      "aliases": [
+        "whale"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "willplus",
+      "title": "WillPlus / AdvHD：ARC/AR2 解包与 WS2 v1 代码子集",
+      "aliases": [
+        "WillPlus",
+        "AdvHD",
+        "Pulltop"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "winters",
+      "title": "Winters：IFP 无遮罩子集与 ISD 尺寸条件",
+      "aliases": [
+        "winters"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "xuse",
+      "title": "Xuse：GD + DLL 数据索引与脚本 XOR",
+      "aliases": [
+        "xuse"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "yaneurao",
+      "title": "Yaneurao：Itufuru 长度字符串指令",
+      "aliases": [
+        "Yaneurao",
+        "Itufuru"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "yatagarasu",
+      "title": "Yatagarasu：PKG v1 密钥索引归档",
+      "aliases": [
+        "yatagarasu"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "yuka",
+      "title": "Yuka：YKS002 类型化文本池",
+      "aliases": [
+        "YukaSystem",
+        "YKC",
+        "YKS"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    },
+    {
+      "id": "yuris",
+      "title": "YU-RIS：YPF 解包、YBN 分区 XOR 与 ysc.ybn",
+      "aliases": [
+        "yuris"
+      ],
+      "capabilities": {
+        "detect": "not_verified",
+        "extract": "catalog-only",
+        "repack": "not_verified",
+        "runtime": "not_verified"
+      },
+      "evidence": {
+        "profile_seed": true,
+        "local_adapter": true,
+        "local_tests": [],
+        "notes": "Bundled engine page and reference modules are present. Keep each stage unverified until the input-specific dialect, fixtures, zero-edit roundtrip, changed-length reparse and runtime evidence are recorded."
+      }
+    }
+  ]
+}

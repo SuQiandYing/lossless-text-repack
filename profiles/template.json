@@ -1,0 +1,17 @@
+{
+  "schema": "lossless-text-repack.profile/1",
+  "id": "example-engine-v1",
+  "family": "example-engine",
+  "aliases": ["Example"],
+  "archive_profiles": [],
+  "dialects": [{"id": "v1", "selectors": ["version-field:1"]}],
+  "capabilities": {
+    "detect": "not_verified",
+    "extract": "not_verified",
+    "repack": "not_verified",
+    "runtime": "not_verified"
+  },
+  "evidence": [],
+  "limitations": ["Replace this seed only after local parser and tests exist."],
+  "license": {"implementation": "MIT", "sources": []}
+}

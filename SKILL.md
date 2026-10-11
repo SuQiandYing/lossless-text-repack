@@ -43,7 +43,20 @@ description: "逆向游戏脚本、字节码与资源归档，构建可审计的
 | 验证、排错、交付验收 | 对适用检查提供真实执行证据 | [验证协议](references/validation.md) |
 | 交付工具、GUI、批处理提速 | 可复现使用方式、限制与实测结果 | [交付与性能](references/delivery-performance.md) |
 
-本包提供规范和验证工具，**不是已经适配任意引擎的解析器**。
+本包提供规范、引擎参考页和可复用的标准库解析/回封模块；每个模块仍按本次输入的版本、方言和证据门禁使用，不能把目录登记当成任意游戏的通用承诺。
+
+## 引擎参考与实现目录
+
+`engines/` 是按引擎和格式组织的技术资料树。顶层 95 页对应 `catalog/engines.json` 的引擎条目，`catalog/engine-pages.json` 绑定每页使用的 Python 文件与公开符号；归档、脚本语义和公共编码模块分别位于 `python/archives/`、`python/engines/` 与 `python/common/`。页面下的专项子页记录过滤器、压缩、字体、版本和工作流，不得跳过后直接套用主页规则。
+
+每次处理引擎输入时：
+
+1. 先读对应主页面及其链接的专项子页，确认容器、脚本层、编码和方言。
+2. 按页面列出的入口调用模块；先探测并建立来源/哈希，再导出 `gt_input` 和 manifest。
+3. 回填前只接受同一 manifest 的 `gt_output`，重解析变更并逐项验证非文本结构。
+4. 页面没有声明的版本、密钥、opcode 或 writer 一律保留为 `not_verified`，不得用相似扩展名或字符串扫描代替证据。
+
+公共交换和部署约束见 [roundtrip-contract](guides/roundtrip-contract.md)、[detection](guides/detection.md) 和 [validation-and-deployment](guides/validation-and-deployment.md)；来源与许可证见 [provenance/NOTICE.md](provenance/NOTICE.md)。
 
 ## 完整规格必读路由（不是摘要替代）
 
@@ -136,3 +149,114 @@ T0 也可以通过零编辑字节保真。能力取决于**本次操作的影响
 
 维护本 skill 时运行 `python -B -m unittest discover -s tests -v`；
 增加门禁规则应同时增加会失败的反例和应通过的邻近正例，不能只测试自己的正常输出。
+
+## 统一引擎目录与交换规范
+
+本 skill 将归档/引擎分层、候选检测、JSON 交换、profile 和阶段能力纳入同一套 21 份规范与门禁。需要使用这些能力时，再读 [统一适配架构](references/compatibility-architecture.md)、[IR 规则](references/ir.md)、[检测规则](references/detection.md)、[JSON 投影](references/json-projection.md) 和 [来源台账](references/licensing.md)。
+
+- `catalog/engines.json` 收录 95 个引擎与格式族条目；它是 profile seed，不是 95 个已验证 writer。
+- `python/core/`、`python/projections/` 和 `python/detectors/` 提供与引擎无关的 IR、标准 JSON 交换和候选检测；`python/archives/`、`python/engines/` 和 `python/common/` 提供页面对应的参考 parser/writer 与公共编码实现。
+- `extract`、`repack`、`runtime` 分别记录；检测器不能直接选择 writer。manifest、locator、源哈希和 ChangeSet 是 JSON/ASM 与回封之间的唯一连接。
+- 每个适配器必须同时补 provenance、拒绝路径、零编辑往返、变长回填和对应 catalog 状态；未验证项写 `not_verified`。
+
+## 引擎索引
+
+<!-- ENGINE_INDEX_START -->
+| 引擎/格式族 | 页面 |
+|---|---|
+| AdvSys3 / arc*.dat | [advsys3](engines/advsys3.md) |
+| AGSI / SB2 | [agsi](engines/agsi.md) |
+| Ail / SNL | [ail](engines/ail.md) |
+| ANIM：滚动密钥 DAT / SCE 局部参考 | [anim](engines/anim.md) |
+| ArcGameEngine：AGE 字符串池算法 | [arcgameengine](engines/arcgameengine.md) |
+| ARCX 工具目录 / SCX.ARC 顺序记录 | [arcx](engines/arcx.md) |
+| Artemis Engine：AST 文本剧本（`.ast`） | [artemis-ast](engines/artemis-ast.md) |
+| Artemis Engine：SCP 文本剧本（`.txt` / `.iet`）与 pf8 多分卷 | [artemis-scp](engines/artemis-scp.md) |
+| Artemis：ASB 项目树的保真读写 | [artemis](engines/artemis.md) |
+| AST / ARC1、ARC2 | [ast](engines/ast.md) |
+| AZSystem：ASB 包装与解密后命令 | [azsystem](engines/azsystem.md) |
+| BGI / Ethornell：有界索引、DSC 编解码与标准 V1 往返 | [bgi](engines/bgi.md) |
+| BlackRainbow：分段脚本与文本 XOR | [blackrainbow](engines/blackrainbow.md) |
+| BlueGale：BDT 与 indexwww.dat 联动 | [bluegale](engines/bluegale.md) |
+| CatSystem2：KIF/INT、CST 对话与安全提取 | [catsystem2](engines/catsystem2.md) |
+| Circus：按游戏配置解释 MES token | [circus](engines/circus.md) |
+| CScript：已解压剧本中的有界记录 | [cscript](engines/cscript.md) |
+| Cyberworks：a0 的 S/T 长度块 | [cyberworks](engines/cyberworks.md) |
+| DigitalWorks / BunBun TAK | [digitalworks](engines/digitalworks.md) |
+| EAGLS / ALIS：SCPACK、文本尾加密与标签修复 | [eagls](engines/eagls.md) |
+| EmonEngine / EME | [emonengine](engines/emonengine.md) |
+| Entis GLS：SRCXML 多语言消息与选择属性 | [entis-gls](engines/entis-gls.md) |
+| Escu:de：ESC-ARC2、分离消息文件与 ESCR1_00 | [escude](engines/escude.md) |
+| ExHibit：RLD v3 静态解密、文本提取与回注 | [exhibit](engines/exhibit.md) |
+| Favorite：HCB u8 字符串长度与绝对地址更新 | [favorite](engines/favorite.md) |
+| FlyingShine / PD2 | [flyingshine](engines/flyingshine.md) |
+| FrontWing / FRONTWING_ADV CSB | [frontwing](engines/frontwing.md) |
+| GSD：先 decode 的 v2 族 SPT 与 global.dat | [gsd](engines/gsd.md) |
+| GxEngine：V3 MWB 字符串与 zlib 包装 | [gxengine](engines/gxengine.md) |
+| HCSystem / PACK | [hcsystem](engines/hcsystem.md) |
+| Hexenhaus：NORI 的 XOR53 固定槽 | [hexenhaus](engines/hexenhaus.md) |
+| HotSoup / HSP DPMX | [hotsoup](engines/hotsoup.md) |
+| ICE / 索引字表文本流 | [ice](engines/ice.md) |
+| IKURA / MPX、ISF | [ikura](engines/ikura.md) |
+| Ivory / fAGS OCB | [ivory](engines/ivory.md) |
+| Kaguya：message.dat 与 LINK6 | [kaguya](engines/kaguya.md) |
+| Kirikiri / KAG：剧本提取、回填与 XP3 补丁 | [kirikiri](engines/kirikiri.md) |
+| Leaf / KCAP、SDT | [leaf](engines/leaf.md) |
+| Livemaker：外部导出的 Original text CSV 方言 | [livemaker](engines/livemaker.md) |
+| Majiro：MJO 异或与文本 / Ruby 指令片段 | [majiro](engines/majiro.md) |
+| Malie / 2008 UTF16 与 data5 EXEC | [malie](engines/malie.md) |
+| Masys / MEG 表达式字符串 | [masys](engines/masys.md) |
+| MED / MDN0：有界脚本归档与序号引用回写 | [med](engines/med.md) |
+| Melonpan / WCW TTD | [melonpan](engines/melonpan.md) |
+| Mirai / ACV1 script.dat | [mirai](engines/mirai.md) |
+| M no Violet / DAT、CScript | [mnoviolet](engines/mnoviolet.md) |
+| MoonHir：FPK → FBX → 第一文本区块 | [moonhir](engines/moonhir.md) |
+| Musica：SC 消息、选择与文本转义 | [musica](engines/musica.md) |
+| Mware：Squirrel literal 与引用级克隆 | [mware](engines/mware.md) |
+| NEJII / CDT、144字节BIN | [nejii](engines/nejii.md) |
+| NekoSDK：ADVSCRIPT2 显示与日志记录 | [nekosdk](engines/nekosdk.md) |
+| NeXAS：PAC 尾索引与 BIN 字符串池回填 | [nexas](engines/nexas.md) |
+| NonColor / legacy ACV | [noncolor](engines/noncolor.md) |
+| NScripter：容器可回写，文本仍须词法与命令边界审核 | [nscripter](engines/nscripter.md) |
+| NSystem：BIN 预设的地址表和独立消息记录 | [nsystem](engines/nsystem.md) |
+| Overflow：TextRes / Log XML 方言 | [overflow](engines/overflow.md) |
+| Patisserie：OZ / OFST 归档 | [patisserie](engines/patisserie.md) |
+| Propeller：MSC 长度文本与样式 toggle | [propeller](engines/propeller.md) |
+| PureMail：OBJ V1 / V2 索引文本池 | [puremail](engines/puremail.md) |
+| QLIE：PACK 3.0 解包、ImoScripter 对白与模板重封包 | [qlie](engines/qlie.md) |
+| Ransel：BCD / BCL 配对归档 | [ransel](engines/ransel.md) |
+| RealLive：文本 token 与换行指令片段 | [reallive](engines/reallive.md) |
+| Ren’Py：RPA/ARC3 归档与 RPYC2 编译脚本回填 | [renpy](engines/renpy.md) |
+| RPG Maker：MV JSON 与 VX Marshal 转换中间态 | [rpgmaker](engines/rpgmaker.md) |
+| SakanaGL：SX 密码与已解码索引 | [sakanagl](engines/sakanagl.md) |
+| ScenePlayer：PMX 剧本归档 | [sceneplayer](engines/sceneplayer.md) |
+| ScrPlayer：XOR 字符串表与命令指针 | [scrplayer](engines/scrplayer.md) |
+| SFA：FGA Huffman 成员与 AOS 文本线索 | [sfa](engines/sfa.md) |
+| ShSystem：只导出特定 scriptcall 0x33 | [shsystem](engines/shsystem.md) |
+| Siglus：Scene.pck 解包不等于 `.ss` 文本往返 | [siglus](engines/siglus.md) |
+| Silky / Silkys：MAP 全索引与 UTF-16 指针修复 | [silky](engines/silky.md) |
+| SLGSystem：SZS100__ 容器与两种密码模式 | [slgsystem](engines/slgsystem.md) |
+| Softpal：PAC 解包与 Sv20 / TEXT.DAT / POINT.DAT | [softpal](engines/softpal.md) |
+| StudioMiris：SKMSd 消息资源表 | [studiomiris](engines/studiomiris.md) |
+| StudioPolaris：已解密 SCD_ 字节码 | [studiopolaris](engines/studiopolaris.md) |
+| Succubus：RIFF / VFA1 事件式归档 | [succubus](engines/succubus.md) |
+| SYSTEM-ε：BIN 文本段与候选跳转模式 | [system-epsilon](engines/system-epsilon.md) |
+| SystemC / SystemB3：FPK、ACT 与 UTF-8 TXD/PTR | [systemc](engines/systemc.md) |
+| SystemNNN：开发版定长槽与发布版 word 地址 | [systemnnn](engines/systemnnn.md) |
+| Tanaka：SCB1 模板重封与 BIN 文本记录 | [tanaka](engines/tanaka.md) |
+| TmrHiro：text 流的 i16 长度往返 | [tmrhiro](engines/tmrhiro.md) |
+| Triangle：MOP / EXD / KLH 的独立文本块 | [triangle](engines/triangle.md) |
+| U-GOS：.o 指针引用的字符串块 | [ugos](engines/ugos.md) |
+| U-MeSoft：PK 尾索引与 SCR/TBL literal 封装 | [umesoft](engines/umesoft.md) |
+| Unison / Softpal Lazy：VAL 分离式字符串池 | [unison](engines/unison.md) |
+| Unity：Utage 剧情表与 serialized asset 回写 | [unity](engines/unity.md) |
+| Violent BIN 规则：只读 JIS 候选证据 | [violent](engines/violent.md) |
+| Whale：文本行结构、SELECT 与 [n] | [whale](engines/whale.md) |
+| WillPlus / AdvHD：ARC/AR2 解包与 WS2 v1 代码子集 | [willplus](engines/willplus.md) |
+| Winters：IFP 无遮罩子集与 ISD 尺寸条件 | [winters](engines/winters.md) |
+| Xuse：GD + DLL 数据索引与脚本 XOR | [xuse](engines/xuse.md) |
+| Yaneurao：Itufuru 长度字符串指令 | [yaneurao](engines/yaneurao.md) |
+| Yatagarasu：PKG v1 密钥索引归档 | [yatagarasu](engines/yatagarasu.md) |
+| Yuka：YKS002 类型化文本池 | [yuka](engines/yuka.md) |
+| YU-RIS：YPF 解包、YBN 分区 XOR 与 ysc.ybn | [yuris](engines/yuris.md) |
+<!-- ENGINE_INDEX_END -->

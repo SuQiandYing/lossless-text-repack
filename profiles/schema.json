@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lossless-text-repack.profile/1",
+  "type": "object",
+  "required": ["schema", "id", "family", "capabilities", "evidence", "limitations", "license"],
+  "properties": {
+    "schema": {"const": "lossless-text-repack.profile/1"},
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "family": {"type": "string"},
+    "aliases": {"type": "array", "items": {"type": "string"}},
+    "archive_profiles": {"type": "array", "items": {"type": "string"}},
+    "dialects": {"type": "array", "items": {"type": "object"}},
+    "capabilities": {
+      "type": "object",
+      "required": ["detect", "extract", "repack", "runtime"],
+      "properties": {
+        "detect": {"enum": ["not_verified", "candidate-only", "confirmed", "ambiguous"]},
+        "extract": {"enum": ["catalog-only", "analysis", "verified", "not_verified"]},
+        "repack": {"enum": ["not_verified", "verified"]},
+        "runtime": {"enum": ["not_verified", "verified"]}
+      },
+      "additionalProperties": false
+    },
+    "evidence": {"type": "array", "items": {"type": "object"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "license": {"type": "object", "required": ["implementation", "sources"]}
+  },
+  "additionalProperties": false
+}

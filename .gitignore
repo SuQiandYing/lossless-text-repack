@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# 门禁脚本的报告产物（用 --report / --report-out 生成）
+*.report.json
+reports/
